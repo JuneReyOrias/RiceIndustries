@@ -1,0 +1,472 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .main_div {
+            width: 365px;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+            justify-content: center;
+        }
+        
+        @media (max-width: 320px) {
+            .modal .main_div {
+                padding: 50px 15px;
+            }
+        }
+        
+        .main_div .title {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 600;
+        }
+        
+        .main_div .social_icons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .social_icons a {
+            display: block;
+            height: 45px;
+            width: 100%;
+            line-height: 45px;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 20px;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s linear;
+        }
+        
+        .social_icons a span {
+            margin-left: 5px;
+            font-size: 18px;
+        }
+        
+        .social_icons a:first-child {
+            margin-right: 5px;
+            background: #4267B2;
+        }
+        
+        .social_icons a:first-child:hover {
+            background: #375695;
+        }
+        
+        .social_icons a:last-child {
+            margin-left: 5px;
+            background: #1DA1F2;
+        }
+        
+        .social_icons a:last-child:hover {
+            background: #0d8bd9;
+        }
+        
+        form {
+            margin-top: 25px;
+        }
+        
+        form .input_box {
+            height: 50px;
+            width: 100%;
+            position: relative;
+            margin-top: 15px;
+        }
+        
+        .input_box input {
+            height: 100%;
+            width: 100%;
+            outline: none;
+            border: 1px solid lightgrey;
+            border-radius: 5px;
+            padding-left: 45px;
+            font-size: 17px;
+            transition: all 0.3s ease;
+        }
+        
+        .input_box button:focus {
+            border-color: #198754;
+        }
+        
+        .input_box .icon {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            color: grey;
+        }
+        
+        form .option_div {
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .option_div .check_box {
+            display: flex;
+            align-items: center;
+        }
+        
+        .option_div span {
+            margin-left: 5px;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .option_div .forget_div a {
+            font-size: 16px;
+            color: #198754;
+        }
+        
+        .button input {
+            padding-left: 0;
+            background: #198754;
+            color: #fff;
+            border: none;
+            font-size: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s linear;
+        }
+        
+        .button input:hover {
+            background: #198754;
+        }
+        
+        form .sign_up {
+            text-align: center;
+            margin-top: 25px;
+        }
+        
+        .sign_up a {
+            color: #198754;
+        }
+        
+        form a {
+            text-decoration: none;
+        }
+        
+        form a:hover {
+            text-decoration: underline;
+        }
+        /* Add the following media query at the end of your existing CSS code */
+        /* Media query for small screens */
+        
+        @media (max-width: 320px) {
+            .modal-dialog {
+                max-width: 90%;
+                /* Adjust the maximum width of the modal for small screens */
+            }
+            .modal-content {
+                background-image: none;
+                /* Remove the background image on small screens if needed */
+            }
+            .modal-body {
+                padding: 15px;
+                /* Adjust padding for small screens */
+            }
+            .main_div {
+                padding: 20px;
+                /* Adjust padding for small screens within the modal */
+            }
+            .main_div .title {
+                font-size: 24px;
+                /* Adjust font size for small screens within the modal */
+            }
+        }
+        /* Add the following media query at the end of your existing CSS code */
+        /* Media query for phones */
+        
+        @media (max-width: 576px) {
+            .modal-dialog {
+                max-width: 90%;
+                /* Adjust the maximum width of the modal for small screens */
+            }
+            .modal-content {
+                background-image: none;
+                /* Remove the background image on small screens if needed */
+            }
+            .modal-body {
+                padding: 15px;
+                /* Adjust padding for small screens */
+            }
+            .main_div {
+                padding: 20px;
+                /* Adjust padding for small screens within the modal */
+            }
+            .main_div .title {
+                font-size: 24px;
+                /* Adjust font size for small screens within the modal */
+            }
+            /* Form styles for small screens */
+            .form .input_box {
+                height: 40px;
+                /* Adjust input height for small screens */
+            }
+            .input_box input {
+                font-size: 14px;
+                /* Adjust font size for input on small screens */
+            }
+            .option_div span {
+                font-size: 14px;
+                /* Adjust font size for span within option_div on small screens */
+            }
+            .button input {
+                font-size: 18px;
+                /* Adjust font size for button on small screens */
+            }
+            /* Add more styles for other form elements as needed */
+        }
+        /* Add the following media query at the end of your existing CSS code */
+        /* Media query for phones */
+        
+        @media (max-width: 576px) {
+            .modal-dialog {
+                max-width: 90%;
+                /* Adjust the maximum width of the modal for small screens */
+            }
+            .modal-content {
+                background-image: none;
+                /* Remove the background image on small screens if needed */
+            }
+            .modal-body {
+                padding: 15px;
+                /* Adjust padding for small screens */
+            }
+            .main_div {
+                padding: 20px;
+                /* Adjust padding for small screens within the modal */
+            }
+            .main_div .title {
+                font-size: 24px;
+                /* Adjust font size for small screens within the modal */
+            }
+            /* Form styles for small screens */
+            .form .input_box {
+                height: 40px;
+                /* Adjust input height for small screens */
+            }
+            .input_box input {
+                font-size: 14px;
+                /* Adjust font size for input on small screens */
+            }
+            .option_div span {
+                font-size: 14px;
+                /* Adjust font size for span within option_div on small screens */
+            }
+            .button input {
+                font-size: 18px;
+                /* Adjust font size for button on small screens */
+            }
+            /* Additional styles for other form elements */
+            .form .check_box {
+                margin-top: 10px;
+                /* Adjust margin for check_box on small screens */
+            }
+            .form .forget_div {
+                margin-top: 10px;
+                /* Adjust margin for forget_div on small screens */
+            }
+            /* Add more styles for other form elements as needed */
+        }
+        /* Add the following media query at the end of your existing CSS code */
+        /* Media query for phones */
+        
+        @media (max-width: 340px) {
+            .modal-dialog {
+                max-width: 90%;
+                /* Adjust the maximum width of the modal for small screens */
+            }
+            .modal-content {
+                background-image: none;
+                /* Center the background image */
+                /* Remove the background image on small screens if needed */
+            }
+            .modal-body {
+                padding: 15px 20-px;
+                /* Adjust padding for small screens */
+            }
+            .main_div {
+                padding: 20px;
+                padding: 15px 20px;
+                width: 75%;
+                /* Adjust padding for small screens within the modal */
+            }
+            .main_div .title {
+                font-size: 24px;
+                /* Adjust font size for small screens within the modal */
+            }
+            /* Form styles for small screens */
+            .form .input_box {
+                height: 40px;
+                padding: 15px 20px;
+                /* Adjust input height for small screens */
+            }
+            .input_box input {
+                font-size: 14px;
+                width: 75% important!;
+                padding: 15px 20px;
+                /* Adjust font size for input on small screens */
+            }
+            .option_div span {
+                font-size: 14px;
+                /* Adjust font size for span within option_div on small screens */
+            }
+            .button input {
+                font-size: 18px;
+                padding: 15px 20px;
+                /* Adjust font size for button on small screens */
+            }
+            .form .check_box {
+                margin-top: 10px;
+                padding: 15px 20px;
+                /* Adjust margin for check_box on small screens */
+            }
+            .form .forget_div {
+                margin-top: 10px;
+                padding: 15px 20px;
+                /* Adjust margin for forget_div on small screens */
+            }
+            /* Additional styles for other form elements */
+            .form .sign_up {
+                padding: 15px 20px;
+                margin-top: 15px;
+                /* Adjust margin for sign_up on small screens */
+                /* Add specific styles for .sign_up class on small screens */
+            }
+            .form .agrimap {
+                margin-top: 10px;
+                padding: 4px 10px;
+                /* Adjust margin for agrimap on small screens */
+                /* Add specific styles for .agrimap class on small screens */
+            }
+            .form .fas.fa-user {
+                margin-top: 10px;
+                padding: 15px 20px;
+                /* Adjust margin for fas fa-user on small screens */
+                /* Add specific styles for .fas.fa-user class on small screens */
+            }
+            .form .form-control {
+                height: 40px;
+                padding: 15px 20px;
+                /* Adjust height for form-control on small screens */
+                font-size: 14px;
+                /* Adjust font size for form-control on small screens */
+                margin-top: 10px;
+                /* Adjust margin for form-control on small screens */
+            }
+            .form .fas.fa-lock {
+                margin-top: 10px;
+                padding: 15px 20px;
+                /* Adjust margin for fas fa-lock on small screens */
+                /* Add specific styles for .fas.fa-lock class on small screens */
+            }
+            .input_box .input {
+                height: 100%;
+                width: 75%;
+                padding: 15px 20px;
+            }
+            /* Add more styles for other form elements as needed */
+        }
+        
+        @media (max-width: 412px) {
+            .modal-dialog {
+                max-width: 90%;
+                /* Adjust the maximum width of the modal for small screens */
+            }
+            .modal-content {
+                background-image: none;
+                /* Center the background image */
+                /* Remove the background image on small screens if needed */
+            }
+            .modal-body {
+                padding: 15px 20-px;
+                /* Adjust padding for small screens */
+            }
+            .main_div {
+                padding: 20px;
+                padding: 15px 20px;
+                width: 75%;
+                /* Adjust padding for small screens within the modal */
+            }
+            .main_div .title {
+                font-size: 24px;
+                /* Adjust font size for small screens within the modal */
+            }
+            /* Form styles for small screens */
+            .form .input_box {
+                height: 40px;
+                padding: 15px 20px;
+                /* Adjust input height for small screens */
+            }
+            .input_box input {
+                font-size: 14px;
+                width: 75% important!;
+                padding: 15px 20px;
+                /* Adjust font size for input on small screens */
+            }
+            .option_div span {
+                font-size: 14px;
+                /* Adjust font size for span within option_div on small screens */
+            }
+            .button input {
+                font-size: 18px;
+                padding: 15px 20px;
+                /* Adjust font size for button on small screens */
+            }
+            .form .check_box {
+                margin-top: 10px;
+                padding: 15px 20px;
+                /* Adjust margin for check_box on small screens */
+            }
+            .form .forget_div {
+                margin-top: 10px;
+                padding: 15px 20px;
+                /* Adjust margin for forget_div on small screens */
+            }
+            /* Additional styles for other form elements */
+            .form .sign_up {
+                padding: 15px 20px;
+                margin-top: 15px;
+                /* Adjust margin for sign_up on small screens */
+                /* Add specific styles for .sign_up class on small screens */
+            }
+            .form .agrimap {
+                margin-top: 10px;
+                padding: 15px 20px;
+                /* Adjust margin for agrimap on small screens */
+                /* Add specific styles for .agrimap class on small screens */
+            }
+            .form .fas.fa-user {
+                margin-top: 10px;
+                padding: 15px 20px;
+                /* Adjust margin for fas fa-user on small screens */
+                /* Add specific styles for .fas.fa-user class on small screens */
+            }
+            .form .form-control {
+                height: 40px;
+                padding: 15px 20px;
+                /* Adjust height for form-control on small screens */
+                font-size: 14px;
+                /* Adjust font size for form-control on small screens */
+                margin-top: 10px;
+                /* Adjust margin for form-control on small screens */
+            }
+            .form .fas.fa-lock {
+                margin-top: 10px;
+                padding: 15px 20px;
+                /* Adjust margin for fas fa-lock on small screens */
+                /* Add specific styles for .fas.fa-lock class on small screens */
+            }
+            .input_box .input {
+                height: 100%;
+                width: 75%;
+                padding: 15px 20px;
+            }
+            /* Add more styles for other form elements as needed */
+        }

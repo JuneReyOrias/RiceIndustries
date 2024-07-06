@@ -30,6 +30,7 @@
             <!-- Page Content -->
             <main>
                 {{ $slot }}
+                @yield('admin');
             </main>
         </div>
     </body>

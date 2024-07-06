@@ -22,11 +22,22 @@
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
+        <div>
+            <x-input-label for="agri_districts" :value="__('Agri_District')" />
+            <x-text-input id="agri_district" name="agri_district" type="text" class="mt-1 block w-full" :value="old('agri_district', $user->agri_district)" required autofocus autocomplete="agri_district" />
+            <x-input-error class="mt-2" :messages="$errors->get('agri_district')" />
+        </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
+        </div>
+        <div>
+            <x-input-label for="role" :value="__('Role')" />
+            <x-text-input id="role" name="role" type="text" class="mt-1 block w-full" :value="old('role', $user->role)" required autofocus autocomplete="role" />
+            <x-input-error class="mt-2" :messages="$errors->get('role')" />
+        </div>
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>

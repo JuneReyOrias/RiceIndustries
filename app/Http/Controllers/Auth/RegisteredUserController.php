@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -28,24 +29,29 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
-    }
+     public function store(RegisterRequest $request): RedirectResponse
+     { 
+         try {
+             // Fetch validated data directly into $data
+             $data = $request->validated();
+             
+             $user = new User;
+            
+             $user->first_name = $request['first_name'];
+             $user->last_name = $request['last_name'];
+             $user->email = $request['email'];
+             $user->agri_district = $request['agri_district'];
+             $user->password = bcrypt($request['password']); // Hash the password for security
+             $user->role = $request['role'];
+            //  dd($user);
+             $user->save();
+             
+             return redirect('/login')->with('message', 'Registered successfully');
+         } catch(\Exception $ex) {
+             dd($ex);
+             return redirect('/register')->with('message', 'Something went wrong');
+         }
+     }
+     
 }

@@ -55,4 +55,8 @@ class LastProductionDatas extends Model
     {
         return $this->belongsTo(AgriDistrict::class, 'agri_districts_id');
     }
+    public function cropfarm()
+    {
+        return $this->hasMany(Crop::class, 'crops_farms_id');
+    }
 }

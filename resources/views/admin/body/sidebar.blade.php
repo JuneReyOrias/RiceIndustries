@@ -39,24 +39,44 @@
             </ul>
           </div>
         </li>
-        
+        <li class="nav-item nav-category">Farmers Data</li>
+        <li class="nav-item">
+          <a class="nav-link" data-bs-toggle="collapse" href="#farmersData" role="button" aria-expanded="false" aria-controls="uiComponents">
+            {{-- <img src="../assets/logo/wheat.png" alt="farmersData Icon" style="width: 20px; height: 20px; color: white;"> --}}
+            <span class="link-title" style="margin-left: 12px;"> Farmers Info</span>
+            <i class="link-arrow" data-feather="chevron-down"></i>
+          </a>
+          <div class="collapse" id="farmersData">
+            <ul class="nav sub-menu" style="padding-left: 70px;">
+              <li class="nav-item">
+                <a href="{{route('personalinfo.create')}}" class="nav-link">Farmers</a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('admin.farmersdata.genfarmers')}}" class="nav-link">General Reports</a>
+              </li>
+             
+            </ul>
+          </div>
+        </li>
 
        
         <li class="nav-item">
-          <a class="nav-link" data-bs-toggle="collapse" href="#livestocks" role="button" aria-expanded="false" aria-controls="uiComponents">
-            <img src="../assets/logo/livestock.png" alt="Crop Icon" style="width: 20px; height: 20px; color: white;">
-            <span class="link-title"style="margin-left:12px;"> LIVESTOCK</span>
+          <a class="nav-link" data-bs-toggle="collapse" href="#Forms" role="button" aria-expanded="false" aria-controls="uiComponents">
+            {{-- <img src="../assets/logo/livestock.png" alt="Crop Icon" style="width: 20px; height: 20px; color: white;"> --}}
+            <span class="link-title"style="margin-left:12px;"> Forms</span>
             <i class="link-arrow" data-feather="chevron-down"></i>
           </a>
-          <div class="collapse" id="livestocks">
+          <div class="collapse" id="Forms">
             <ul class="nav sub-menu"  style="padding-left: 70px;">
 
               <li class="nav-item">
-                <a href="{{route('map.chickenmap')}}" class="nav-link">Chicken</a>
+                <a href="{{route('admin.corn.forms.corn_form')}}" class="nav-link">Survey Form</a>
               </li>
               <li class="nav-item">
-                <a href="{{route('map.hogsmap')}}" class="nav-link">Hogs</a>
+                <a href="{{route('admin.farmersdata.samplefolder.farm_edit')}}" class="nav-link">Sample Folder</a>
               </li>
+
+
              
             </ul>
           </div>
@@ -102,7 +122,7 @@
                 </li>
               </ul>
             </div>
-            <a class="nav-link" data-bs-toggle="collapse" href="#forms" role="button" aria-expanded="false" aria-controls="forms">
+            {{-- <a class="nav-link" data-bs-toggle="collapse" href="#forms" role="button" aria-expanded="false" aria-controls="forms">
               <i class="link-icon" data-feather="inbox"style="margin-left:20px;"></i>
               <span class="link-title"style="margin-left:50px;">Forms</span>
               <i class="link-arrow" data-feather="chevron-down"></i>
@@ -119,13 +139,13 @@
                   <a href="{{route('kml.import')}}" class="nav-link">Kml Import</a>
                 </li>
               </ul>
-            </div>
-            <a class="nav-link" data-bs-toggle="collapse" href="#farmers" role="button" aria-expanded="false" aria-controls="farmers">
+            </div> --}}
+            {{-- <a class="nav-link" data-bs-toggle="collapse" href="#farmers" role="button" aria-expanded="false" aria-controls="farmers">
               <i class="link-icon" data-feather="info" style="margin-left:20px;"></i>
               <span class="link-title"style="margin-left:50px;">Farmers Info</span>
               <i class="link-arrow" data-feather="chevron-down"></i>
-            </a>
-            <div class="collapse" id="farmers">
+            </a> --}}
+            {{-- <div class="collapse" id="farmers">
               <ul class="nav sub-menu" style="padding-left:70px;">
                 <li class="nav-item">
                   <a href="{{route('personalinfo.create')}}" class="nav-link">Rice Farmers Info</a>
@@ -134,7 +154,7 @@
                   <a href="{{route('variable_cost.seeds.view')}}" class="nav-link">Variable Cost</a>
                 </li>
               </ul>
-            </div>
+            </div> --}}
             <a class="nav-link" data-bs-toggle="collapse" href="#charts" role="button" aria-expanded="false" aria-controls="charts">
               <i class="link-icon" data-feather="slack"style="margin-left:20px;"></i>
               <span class="link-title"style="margin-left:50px;">Rice Varieties</span>
@@ -202,12 +222,12 @@
                 </li>
               </ul>
             </div>
-            <a class="nav-link" data-bs-toggle="collapse" href="#form" role="button" aria-expanded="false" aria-controls="forms">
+            {{-- <a class="nav-link" data-bs-toggle="collapse" href="#form" role="button" aria-expanded="false" aria-controls="forms">
               <i class="link-icon" data-feather="inbox"style="margin-left:25px;"></i>
               <span class="link-title"style="margin-left:50px;">Forms</span>
               <i class="link-arrow" data-feather="chevron-down"></i>
-            </a>
-            <div class="collapse" id="form">
+            </a> --}}
+            {{-- <div class="collapse" id="form">
               <ul class="nav sub-menu"style="padding-left:70px;">
                 <li class="nav-item">
                   <a href="{{route('admin.corn.forms.corn_form')}}" class="nav-link">Corn Survey Form</a>
@@ -219,13 +239,13 @@
                   <a href="" class="nav-link">Kml Import</a>
                 </li>
               </ul>
-            </div>
-            <a class="nav-link" data-bs-toggle="collapse" href="#farmer" role="button" aria-expanded="false" aria-controls="farmers">
+            </div> --}}
+            {{-- <a class="nav-link" data-bs-toggle="collapse" href="#farmer" role="button" aria-expanded="false" aria-controls="farmers">
               <i class="link-icon" data-feather="info" style="margin-left:25px;"></i>
               <span class="link-title"style="margin-left:50px;">Farmers Info</span>
               <i class="link-arrow" data-feather="chevron-down"></i>
-            </a>
-            <div class="collapse" id="farmer">
+            </a> --}}
+            {{-- <div class="collapse" id="farmer">
               <ul class="nav sub-menu"style="padding-left:70px;">
                 <li class="nav-item">
                   <a href="{{route('admin.corn.farmersInfo.information')}}" class="nav-link">Corn Farmers Info</a>
@@ -234,7 +254,7 @@
                   <a href="" class="nav-link">Variable Cost</a>
                 </li>
               </ul>
-            </div>
+            </div> --}}
             <a class="nav-link" data-bs-toggle="collapse" href="#chart" role="button" aria-expanded="false" aria-controls="charts">
               <i class="link-icon" data-feather="slack"style="margin-left:25px;"></i>
               <span class="link-title"style="margin-left:50px;">Corn Varieties</span>
@@ -302,12 +322,12 @@
                 </li>
               </ul>
             </div>
-            <a class="nav-link" data-bs-toggle="collapse" href="#formcoco" role="button" aria-expanded="false" aria-controls="forms">
+            {{-- <a class="nav-link" data-bs-toggle="collapse" href="#formcoco" role="button" aria-expanded="false" aria-controls="forms">
               <i class="link-icon" data-feather="inbox"style="margin-left:25px;"></i>
               <span class="link-title"style="margin-left:50px;">Forms</span>
               <i class="link-arrow" data-feather="chevron-down"></i>
-            </a>
-            <div class="collapse" id="formcoco">
+            </a> --}}
+            {{-- <div class="collapse" id="formcoco">
               <ul class="nav sub-menu"style="padding-left:70px;">
                 <li class="nav-item">
                   <a href="{{route('admin.corn.forms.corn_form')}}" class="nav-link">Coconut Survey Form</a>
@@ -319,13 +339,13 @@
                   <a href="" class="nav-link">Kml Import</a>
                 </li>
               </ul>
-            </div>
-            <a class="nav-link" data-bs-toggle="collapse" href="#farmercoco" role="button" aria-expanded="false" aria-controls="farmers">
+            </div> --}}
+            {{-- <a class="nav-link" data-bs-toggle="collapse" href="#farmercoco" role="button" aria-expanded="false" aria-controls="farmers">
               <i class="link-icon" data-feather="info"style="margin-left:25px;"></i>
               <span class="link-title"style="margin-left:50px;">Farmers Info</span>
               <i class="link-arrow" data-feather="chevron-down"></i>
-            </a>
-            <div class="collapse" id="farmercoco">
+            </a> --}}
+            {{-- <div class="collapse" id="farmercoco">
               <ul class="nav sub-menu"style="padding-left:70px;">
                 <li class="nav-item">
                   <a href="{{route('admin.corn.farmersInfo.information')}}" class="nav-link">Coconut Farmer Info</a>
@@ -334,7 +354,7 @@
                   <a href="" class="nav-link">Variable Cost</a>
                 </li>
               </ul>
-            </div>
+            </div> --}}
             <a class="nav-link" data-bs-toggle="collapse" href="#chartcoco" role="button" aria-expanded="false" aria-controls="charts">
               <i class="link-icon" data-feather="slack"style="margin-left:25px;"></i>
               <span class="link-title"style="margin-left:50px;">Coconut Varieties</span>
@@ -366,207 +386,9 @@
           </div>
         </li>
 
-      {{--  livestock  --}}
-      <li class="nav-item nav-category">LIVESTOCK</li>
-
-      {{-- chicken --}}
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#chicken" role="button" aria-expanded="false" aria-controls="chicken">
-          <img src="../assets/logo/chicken.png" alt="Crop Icon" style="width: 20px; height: 20px; color: white;">
-          <span class="link-title"style="margin-left:12px;">CHICKEN</span>
-          <i class="link-arrow" data-feather="chevron-down"></i>
-        </a>
-        <div class="collapse" id="chicken">
-          <a class="nav-link" data-bs-toggle="collapse" href="#report" role="button" aria-expanded="false" aria-controls="report">
-            <img src="../assets/logo/report.png" alt="Crop Icon" style="width: 20px; height: 20px; color: white; margin-left:20px">
-            <span class="link-title"style="margin-left:12px;">Reports/Agri-Districts</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="report">
-            <ul class="nav sub-menu"style="padding-left:70px;">
-              <li class="nav-item">
-                <a href="{{route('admin.corn.districtreport.ayala')}}" class="nav-link">Ayala Farmers</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Tumaga Farmers</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Culianan Farmers</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Manicahan Farmers</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Curuan Farmers</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Vitali Farmers</a>
-              </li>
-            </ul>
-          </div>
-          <a class="nav-link" data-bs-toggle="collapse" href="#forms" role="button" aria-expanded="false" aria-controls="forms">
-            <i class="link-icon" data-feather="inbox"style="margin-left:25px;"></i>
-            <span class="link-title"style="margin-left:50px;">Forms</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="forms">
-            <ul class="nav sub-menu"style="padding-left:70px;">
-              <li class="nav-item">
-                <a href="{{route('admin.corn.forms.corn_form')}}" class="nav-link">Chicken Survey Form</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Multiple Import Form</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Kml Import</a>
-              </li>
-            </ul>
-          </div>
-          <a class="nav-link" data-bs-toggle="collapse" href="#farmers" role="button" aria-expanded="false" aria-controls="farmers">
-            <i class="link-icon" data-feather="info"style="margin-left:25px;"></i>
-            <span class="link-title"style="margin-left:50px;">Farmers Info</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="farmers">
-            <ul class="nav sub-menu">
-              <li class="nav-item">
-                <a href="{{route('admin.corn.farmersInfo.information')}}" class="nav-link">Chicken Farmer Info</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Variable Cost</a>
-              </li>
-            </ul>
-          </div>
-          {{-- <a class="nav-link" data-bs-toggle="collapse" href="#charts" role="button" aria-expanded="false" aria-controls="charts">
-            <i class="link-icon" data-feather="slack"></i>
-            <span class="link-title">Chicken Varieties</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="charts">
-            <ul class="nav sub-menu">
-              <li class="nav-item">
-                <a href="{{route('admin.rice_varieties.rice_varietydistrict')}}" class="nav-link">Rice Varieties/District</a>
-              </li>
-            </ul>
-          </div> --}}
-
-          <a class="nav-link" data-bs-toggle="collapse" href="#Ricecharts" role="button" aria-expanded="false" aria-controls="charts">
-            <img src="../assets/logo/graph.png" alt="Crop Icon" style="width: 20px; height: 20px; color: white; margin-left:20px;">
-            <span class="link-title"style="margin-left:12px;">Chicken Production</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="Ricecharts">
-            <ul class="nav sub-menu" style="padding-left:70px;">
-              <li class="nav-item">
-                <a href="{{route('admin.corn.production.reportsproduce')}}" class="nav-link">Chicken</a>
-              </li>
-              {{-- <li class="nav-item">
-                <a href="{{route('admin.crop_production.rice_crops')}}" class="nav-link">Upland Rice</a>
-              </li> --}}
-            </ul>
-          </div>
-        </div>
-      </li>
-       <!-- Space -->
-       {{-- <li class="nav-item space"></li> --}}
-     {{-- hog --}}
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="collapse" href="#Hogs" role="button" aria-expanded="false" aria-controls="Hogs">
-          <img src="../assets/logo/pig.png" alt="Crop Icon" style="width: 20px; height: 20px; color: white;">
-          <span class="link-title"style="margin-left:12px;">HOGS</span>
-          <i class="link-arrow" data-feather="chevron-down"></i>
-        </a>
-        <div class="collapse" id="Hogs">
-          <a class="nav-link" data-bs-toggle="collapse" href="#reportshog" role="button" aria-expanded="false" aria-controls="report">
-            <img src="../assets/logo/report.png" alt="Crop Icon" style="width: 20px; height: 20px; color: white; margin-left:20px">
-            <span class="link-title"style="margin-left:12px;">Reports/Agri-Districts</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="reportshog">
-            <ul class="nav sub-menu"style="padding-left:70px;">
-              <li class="nav-item">
-                <a href="{{route('admin.corn.districtreport.ayala')}}" class="nav-link">Ayala Farmers</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Tumaga Farmers</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Culianan Farmers</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Manicahan Farmers</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Curuan Farmers</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Vitali Farmers</a>
-              </li>
-            </ul>
-          </div>
-          <a class="nav-link" data-bs-toggle="collapse" href="#formhog" role="button" aria-expanded="false" aria-controls="forms">
-            <i class="link-icon" data-feather="inbox"style="margin-left:25px;"></i>
-            <span class="link-title"style="margin-left:50px;">Forms</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="formhog">
-            <ul class="nav sub-menu"style="padding-left:70px;">
-              <li class="nav-item">
-                <a href="{{route('admin.corn.forms.corn_form')}}" class="nav-link">hog Survey Form</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Multiple Import Form</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Kml Import</a>
-              </li>
-            </ul>
-          </div>
-          <a class="nav-link" data-bs-toggle="collapse" href="#farmerhog" role="button" aria-expanded="false" aria-controls="farmers">
-            <i class="link-icon" data-feather="info"style="margin-left:25px;"></i>
-            <span class="link-title"style="margin-left:50px;">Farmers Info</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="farmerhog">
-            <ul class="nav sub-menu" style="padding-left:70px;">
-              <li class="nav-item">
-                <a href="{{route('admin.corn.farmersInfo.information')}}" class="nav-link">hog Farmer Info</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">hog Farmer Variable Cost</a>
-              </li>
-            </ul>
-          </div>
-          {{-- <a class="nav-link" data-bs-toggle="collapse" href="#charthog" role="button" aria-expanded="false" aria-controls="charts">
-            <i class="link-icon" data-feather="slack"></i>
-            <span class="link-title">hog Varieties</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="charthog">
-            <ul class="nav sub-menu">
-              <li class="nav-item">
-                <a href="{{route('admin.rice_varieties.rice_varietydistrict')}}" class="nav-link">hog Varieties/District</a>
-              </li>
-            </ul>
-          </div> --}}
-
-          <a class="nav-link" data-bs-toggle="collapse" href="#hogcharts" role="button" aria-expanded="false" aria-controls="charts">
-            <img src="../assets/logo/graph.png" alt="Crop Icon" style="width: 20px; height: 20px; color: white;margin-left:20px;">
-            <span class="link-title"style="margin-left:12px;">hog Production</span>
-            <i class="link-arrow" data-feather="chevron-down"></i>
-          </a>
-          <div class="collapse" id="hogcharts">
-            <ul class="nav sub-menu" style="margin-left:70px;">
-              <li class="nav-item">
-                <a href="{{route('admin.corn.variety.varieties')}}" class="nav-link">hogs</a>
-              </li>
-              {{-- <li class="nav-item">
-                <a href="{{route('admin.rice_varieties.rice_varietydistrict')}}" class="nav-link">Upland Corn</a>
-              </li> --}}
-            </ul>
-          </div>
-        </div>
-      </li>
+     
+    
+  
       
 
 
@@ -769,32 +591,3 @@
       </ul>
     </div>
   </nav>
-  <script>
-    $(document).ready(function() {
-      $('#croprice .collapse').on('shown.bs.collapse', function () {
-      $(this).prev('.nav-link').addClass('active');
-      }).on('hidden.bs.collapse', function () {
-      $(this).prev('.nav-link').removeClass('active');
-      });
-    
-      $('#croprice').on('shown.bs.collapse', function () {
-      // Prevent adding active class to the "Rice" link
-      $('a[href="#croprice"]').removeClass('active');
-      });
-    });
-    </script>
-
-<script>
-  $(document).ready(function() {
-    $('#chicken .collapse').on('shown.bs.collapse', function () {
-    $(this).prev('.nav-link').addClass('active');
-    }).on('hidden.bs.collapse', function () {
-    $(this).prev('.nav-link').removeClass('active');
-    });
-  
-    $('#chicken').on('shown.bs.collapse', function () {
-    // Prevent adding active class to the "Rice" link
-    $('a[href="#chicken"]').removeClass('active');
-    });
-  });
-  </script>

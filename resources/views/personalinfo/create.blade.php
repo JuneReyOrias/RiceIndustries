@@ -4,12 +4,20 @@
 @extends('layouts._footer-script')
 @extends('layouts._head')
 
+<style>
 
+.custom-cell {
+    font-size: 14px;
+    width: 150px; /* Adjust the width as needed */
+    padding: 8px; /* Adjust the padding as needed */
+
+}
+</style>
 
 <div class="page-content">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                     
-                    <h2>Rice Farmers Data</h2>
+                    <h4>Farmers Data</h4>
                 </div>
                 <br>
                 @if (session()->has('message'))
@@ -51,7 +59,7 @@
                                     <thead >
                                         <tr >
                     
-                                            <th>Farmer No.</th>
+                                            <th>#</th>
                                             <th>Farmer Name</th>
                                            
                                             <th>Home Address</th>
@@ -82,8 +90,8 @@
                                     @foreach($personalinfos as $personalinformation)      
                                 <tr class="table-light">
                                     {{-- <td>{{ $loop->iteration }}</td> --}}
-                                    <td>{{  $personalinformation->id }}</td>
-                                    <td class=" d-md-table-cell">
+                                    <td class="custom-cell">{{  $personalinformation->id }}</td>
+                                    <td class="custom-cell">
                                     <?php
                                     // Define variables
                                     $first_name = $personalinformation->first_name;
@@ -110,13 +118,16 @@
                                     echo htmlspecialchars($full_name);
                                     ?>
                                 </td>
-                                <td>
-                                @if ($personalinformation->barangay || $personalinformation->agri_district || $personalinformation->city)
-                                    {{ $personalinformation->barangay ?? 'N/A' }}, {{ $personalinformation->agri_district ?? 'N/A' }}, {{ $personalinformation->city ?? 'N/A' }}
-                                @else
-                            
-                                @endif
-                            </td>
+                                <td class="custom-cell">
+                                    @if ($personalinformation->barangay || $personalinformation->agri_district || $personalinformation->city)
+                                        {{ $personalinformation->barangay ?? 'N/A' }}, {{ $personalinformation->agri_district ?? 'N/A' }}, {{ $personalinformation->city ?? 'N/A' }}
+                                    @elseif ($personalinformation->home_address)
+                                        {{ $personalinformation->home_address }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </td>
+                                
                             <td>
                                 @if ($personalinformation->sex && $personalinformation->sex != 'N/A')
                                     {{ $personalinformation->sex }}
@@ -277,11 +288,11 @@
                                 <!-- Pagination links -->
                                 <ul class="pagination">
                                     <li><a href="{{ $personalinfos->previousPageUrl() }}">Previous</a></li>
-                                    @foreach ($personalinfos->getUrlRange(1,$personalinfos->lastPage()) as $page => $url)
-                                        <li class="{{ $page == $personalinfos->currentPage() ? 'active' : '' }}">
-                                            <a href="{{ $url }}">{{ $page }}</a>
-                                        </li>
-                                    @endforeach
+                                    @foreach ($personalinfos->getUrlRange(max(1, $personalinfos->currentPage() - 1), min($personalinfos->lastPage(), $personalinfos->currentPage() + 1)) as $page => $url)
+                                    <li class="{{ $page == $personalinfos->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @endforeach
                                     <li><a href="{{ $personalinfos->nextPageUrl() }}">Next</a></li>
                                 </ul>
 
@@ -546,11 +557,11 @@
                                 <!-- Pagination links -->
                                 <ul class="pagination">
                                     <li><a href="{{ $farmProfiles->previousPageUrl() }}">Previous</a></li>
-                                    @foreach ($farmProfiles->getUrlRange(1,$farmProfiles->lastPage()) as $page => $url)
-                                        <li class="{{ $page == $farmProfiles->currentPage() ? 'active' : '' }}">
-                                            <a href="{{ $url }}">{{ $page }}</a>
-                                        </li>
-                                    @endforeach
+                                    @foreach ($farmProfiles->getUrlRange(max(1, $farmProfiles->currentPage() - 1), min($farmProfiles->lastPage(), $farmProfiles->currentPage() + 1)) as $page => $url)
+                                    <li class="{{ $page == $farmProfiles->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @endforeach
                                     <li><a href="{{ $farmProfiles->nextPageUrl() }}">Next</a></li>
                                 </ul>
                             </div>
@@ -686,11 +697,11 @@
                                 <!-- Pagination links -->
                                 <ul class="pagination">
                                     <li><a href="{{ $fixedcosts->previousPageUrl() }}">Previous</a></li>
-                                    @foreach ($fixedcosts->getUrlRange(1,$fixedcosts->lastPage()) as $page => $url)
-                                        <li class="{{ $page == $fixedcosts->currentPage() ? 'active' : '' }}">
-                                            <a href="{{ $url }}">{{ $page }}</a>
-                                        </li>
-                                    @endforeach
+                                    @foreach ($fixedcosts->getUrlRange(max(1, $fixedcosts->currentPage() - 1), min($fixedcosts->lastPage(), $fixedcosts->currentPage() + 1)) as $page => $url)
+                                    <li class="{{ $page == $fixedcosts->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @endforeach
                                     <li><a href="{{ $fixedcosts->nextPageUrl() }}">Next</a></li>
                                 </ul>
                             </div>
@@ -917,11 +928,11 @@
                                 <!-- Pagination links -->
                                 <ul class="pagination">
                                     <li><a href="{{ $machineries->previousPageUrl() }}">Previous</a></li>
-                                    @foreach ($machineries->getUrlRange(1,$machineries->lastPage()) as $page => $url)
-                                        <li class="{{ $page == $machineries->currentPage() ? 'active' : '' }}">
-                                            <a href="{{ $url }}">{{ $page }}</a>
-                                        </li>
-                                    @endforeach
+                                    @foreach ( $machineries->getUrlRange(max(1,  $machineries->currentPage() - 1), min( $machineries->lastPage(),  $machineries->currentPage() + 1)) as $page => $url)
+                                    <li class="{{ $page ==  $machineries->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @endforeach
                                     <li><a href="{{ $machineries->nextPageUrl() }}">Next</a></li>
                                 </ul>
                             </div>
@@ -1004,8 +1015,8 @@
 
 
                                       <td>
-                                        @if (!is_null($vartotal->seeds->total_seed_cost) && $vartotal->seeds->total_seed_cost && strtolower($vartotal->seeds->total_seed_cost) != 'n/a')
-                                            {{ number_format($vartotal->seeds->total_seed_cost, 2) }}
+                                        @if (!is_null($vartotal->total_seed_cost) && $vartotal->total_seed_cost && strtolower($vartotal->total_seed_cost) != 'n/a')
+                                            {{ number_format($vartotal->total_seed_cost, 2) }}
                                         @else
                                            
                                              
@@ -1014,22 +1025,22 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if (!is_null($vartotal->labors->total_labor_cost) &&$vartotal->labors->total_labor_cost && strtolower($vartotal->labors->total_labor_cost) != 'n/a')
-                                            {{ number_format($vartotal->labors->total_labor_cost, 2) }}
+                                        @if (!is_null($vartotal->total_labor_cost) &&$vartotal->total_labor_cost && strtolower($vartotal->total_labor_cost) != 'n/a')
+                                            {{ number_format($vartotal->total_labor_cost, 2) }}
                                         @else
                                            
                                         @endif
                                     </td>
                                     <td>
-                                        @if (!is_null($vartotal->fertilizers->total_cost_fertilizers) &&$vartotal->fertilizers->total_cost_fertilizers && strtolower($vartotal->fertilizers->total_cost_fertilizers) != 'n/a')
-                                            {{ number_format($vartotal->fertilizers->total_cost_fertilizers, 2) }}
+                                        @if (!is_null($vartotal->total_cost_fertilizers) &&$vartotal->total_cost_fertilizers && strtolower($vartotal->total_cost_fertilizers) != 'n/a')
+                                            {{ number_format($vartotal->total_cost_fertilizers, 2) }}
                                         @else
                                           
                                         @endif
                                     </td>
                                     <td>
-                                        @if (!is_null($vartotal->pesticides->total_cost_pesticides) && $vartotal->pesticides->total_cost_pesticides && strtolower($vartotal->pesticides->total_cost_pesticides) != 'n/a')
-                                            {{ number_format($vartotal->pesticides->total_cost_pesticides, 2) }}
+                                        @if (!is_null($vartotal->total_cost_pesticides) && $vartotal->total_cost_pesticides && strtolower($vartotal->total_cost_pesticides) != 'n/a')
+                                            {{ number_format($vartotal->total_cost_pesticides, 2) }}
                                         @else
                                           
                                                
@@ -1037,8 +1048,8 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if (!is_null($vartotal->transports->total_transport_per_deliverycost) &&$vartotal->transports->total_transport_per_deliverycost && strtolower($vartotal->transports->total_transport_per_deliverycost) != 'n/a')
-                                            {{ number_format($vartotal->transports->total_transport_per_deliverycost, 2) }}
+                                        @if (!is_null($vartotal->total_transport_per_deliverycost) &&$vartotal->total_transport_per_deliverycost && strtolower($vartotal->total_transport_per_deliverycost) != 'n/a')
+                                            {{ number_format($vartotal->total_transport_per_deliverycost, 2) }}
                                         @else
                                             
                                         @endif
@@ -1084,13 +1095,16 @@
                                 <!-- Pagination links -->
                                 <ul class="pagination">
                                     <li><a href="{{ $variable->previousPageUrl() }}">Previous</a></li>
-                                    @foreach ($variable->getUrlRange(1,$variable->lastPage()) as $page => $url)
-                                        <li class="{{ $page == $variable->currentPage() ? 'active' : '' }}">
-                                            <a href="{{ $url }}">{{ $page }}</a>
-                                        </li>
-                                    @endforeach
+                                    @foreach ($variable->getUrlRange(max(1, $variable->currentPage() - 1), min($variable->lastPage(), $variable->currentPage() + 1)) as $page => $url)
+                                    <li class="{{ $page == $variable->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @endforeach
                                     <li><a href="{{ $variable->nextPageUrl() }}">Next</a></li>
                                 </ul>
+
+
+                              
                         </div>
                         {{-- total Variable cost --}}
                        
@@ -1296,15 +1310,16 @@
                             </div>
                             <br>
                             <!-- Pagination links -->
-                            <ul class="pagination">
+                            {{-- <ul class="pagination">
                                 <li><a href="{{ $productions->previousPageUrl() }}">Previous</a></li>
-                                @foreach ($productions->getUrlRange(1,$productions->lastPage()) as $page => $url)
+                                @foreach ($productions->getUrlRange(max(1, $productions->currentPage() - 1), min($productions->lastPage(), $productions->currentPage() + 1)) as $page => $url)
                                     <li class="{{ $page == $productions->currentPage() ? 'active' : '' }}">
                                         <a href="{{ $url }}">{{ $page }}</a>
                                     </li>
                                 @endforeach
                                 <li><a href="{{ $productions->nextPageUrl() }}">Next</a></li>
-                            </ul>
+                            </ul> --}}
+                            
                         </div>
                       
                     </div>

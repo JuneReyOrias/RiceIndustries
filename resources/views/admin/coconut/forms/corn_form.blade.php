@@ -2,7 +2,7 @@
     <div class="form_1 data_info">
         <h2>Personal Info</h2>
         <div class="content">
-            <form method="post" action{{url('store') }}>
+            <form method="post" action{{url('CornSave')}}>
               @csrf
               <div class="user-details">
                 <div class="input-box">

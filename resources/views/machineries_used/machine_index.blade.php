@@ -177,7 +177,7 @@
                   </select>
 
                 </div>
-                  {{-- add new plowing status Machineries --}}
+                  {{-- add new plowing status Machineries not pa include sa form --}}
                   <div class="col-md-3 mb-3" id="StatusInput" style="display: none;">
                     <label for="StatusInput">Other(input here):</label>
                     <input type="text" id="harroStatusInputField" class="form-control placeholder-text @error('add_harrowStatus') is-invalid @enderror" name="add_harrowStatus" placeholder=" Enter ownership status" value="{{ old('add_harrowStatus') }}">

@@ -14,19 +14,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
   <!-- End fonts -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<!-- core:css -->	
 <!-- core:css -->
 <link rel="stylesheet" href="../assets/vendors/core/core.css">
 <!-- endinject -->
 <!-- Include Bootstrap CSS -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+{{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet"> --}}
 
 <!-- Plugin css for this page -->
 <link rel="stylesheet" href="../assets/vendors/flatpickr/flatpickr.min.css">
 <!-- End plugin css for this page -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> --}}
 
 
 <!-- inject:css -->
@@ -38,9 +40,9 @@
 <!-- Layout styles -->  
 <link rel="stylesheet" href="../assets/css/demo2/style.css">
 <!-- End layout styles -->
-
+<link rel="stylesheet" href="../assets/css/style.css">
 <link rel="shortcut icon" href="../assets/logo/logo.png" />
-<link rel="shortcut icon" href="https://www.flaticon.com/free-icons/agriculture" />
+{{-- <link rel="shortcut icon" href="https://www.flaticon.com/free-icons/agriculture" /> --}}
 
 
 </head>
@@ -96,9 +98,37 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- Include Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+{{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script> --}}
 
+<script>
+    $(document).ready(function() {
+      $('#croprice .collapse').on('shown.bs.collapse', function () {
+      $(this).prev('.nav-link').addClass('active');
+      }).on('hidden.bs.collapse', function () {
+      $(this).prev('.nav-link').removeClass('active');
+      });
+    
+      $('#croprice').on('shown.bs.collapse', function () {
+      // Prevent adding active class to the "Rice" link
+      $('a[href="#croprice"]').removeClass('active');
+      });
+    });
+    </script>
 
+<script>
+  $(document).ready(function() {
+    $('#chicken .collapse').on('shown.bs.collapse', function () {
+    $(this).prev('.nav-link').addClass('active');
+    }).on('hidden.bs.collapse', function () {
+    $(this).prev('.nav-link').removeClass('active');
+    });
+  
+    $('#chicken').on('shown.bs.collapse', function () {
+    // Prevent adding active class to the "Rice" link
+    $('a[href="#chicken"]').removeClass('active');
+    });
+  });
+  </script>
 
   
 
@@ -590,111 +620,7 @@
 	   
 	   
 	   
-		   // Monthly Sales Chart
-		   if ($('#monthlySalesChart').length) {
-			   var options = {
-				   chart: {
-					   type: 'bar',
-					   height: '318',
-					   parentHeightOffset: 0,
-					   foreColor: colors.dark,
-					   background: colors.light,
-					   toolbar: {
-						   show: false
-					   },
-				   },
-				   theme: {
-					   mode: 'light'
-				   },
-				   tooltip: {
-					   theme: 'light'
-				   },
-				   colors: [colors.success],
-				   fill: {
-					   opacity: .9
-				   },
-				   grid: {
-					   padding: {
-						   bottom: -4
-					   },
-					   borderColor: colors.secondary,
-					   xaxis: {
-						   lines: {
-							   show: true
-						   }
-					   }
-				   },
-				   series: [{
-						   name: 'Inbrid',
-						   data: [103, 258, 95, 258, 132, 330],
-					   },
-	   
-	   
-					   {
-						   name: 'Hybrid',
-						   data: [99, 24, 26, 9, 78, 0],
-					   },
-					   {
-	   
-						   name: 'Not specified',
-						   data: [1, 13, 1, 4],
-					   }
-				   ],
-				   xaxis: {
-					   type: 'Category',
-					   name: 'Districts',
-					   categories: ['Ayala District', 'Culianan District', 'Curuan District', 'Manicahan District', 'Tumaga District', 'Vitali District'],
-					   axisBorder: {
-						   color: colors.success,
-					   },
-					   axisTicks: {
-						   color: colors.success,
-					   },
-				   },
-				   yaxis: {
-					   title: {
-						   text: 'Number of Farms',
-						   style: {
-							   size: 9,
-							   color: colors.success
-						   }
-					   },
-				   },
-				   legend: {
-					   show: true,
-					   position: "top",
-					   horizontalAlign: 'center',
-					   fontFamily: fontFamily,
-					   itemMargin: {
-						   horizontal: 8,
-						   vertical: 0
-					   },
-				   },
-				   stroke: {
-					   width: 0
-				   },
-				   dataLabels: {
-					   enabled: true,
-					   style: {
-						   fontSize: '10px',
-						   fontFamily: fontFamily,
-					   },
-					   offsetY: -27
-				   },
-				   plotOptions: {
-					   bar: {
-						   columnWidth: "50%",
-						   borderRadius: 4,
-						   dataLabels: {
-							   position: 'top',
-							   orientation: 'vertical',
-						   }
-					   },
-				   },
-			   }
-			   var apexBarChart = new ApexCharts(document.querySelector("#monthlySalesChart"), options);
-			   apexBarChart.render();
-		   }
+		 
 		   // Monthly Sales Chart - END
 	   
 	   
@@ -800,11 +726,7 @@
 			   apexBarChart.render();
 		   }
 		   // Monthly Sales Chart - RTL - END
-	   
-	   
-	   
-	   
-		   var riceProductionValue ={{ $totalRiceProduction}};
+		   var riceProductionValue ={{ number_format($totalRiceProduction,2)}};
 		   // Cloud Storage Chart
 		   if ($('#storageChart').length) {
 			   var options = {

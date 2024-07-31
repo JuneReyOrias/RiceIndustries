@@ -55,7 +55,7 @@ class AgentController extends Controller
             if ($agent) {
                 // Assuming you have additional logic to fetch dashboard data
                 $totalfarms = FarmProfile::count();
-                $totalAreaPlanted = FarmProfile::sum('total_physical_area_has');
+                $totalAreaPlanted = FarmProfile::sum('total_physical_area');
                 $totalAreaYield = FarmProfile::sum('yield_kg_ha');
                 $totalCost = VariableCost::sum('total_variable_cost');
     

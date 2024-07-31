@@ -70,7 +70,7 @@ class AdminController extends Controller
         return redirect('/');
     }//end 
 
-    public function adminDashb()
+    public function adminDashb(Request $request)
     {
         // Check if the user is authenticated
         if (Auth::check()) {
@@ -89,21 +89,135 @@ class AdminController extends Controller
     
                 $yieldPerAreaPlanted = ($totalAreaPlanted != 0) ? $totalAreaYield / $totalAreaPlanted : 0;
                 $averageCostPerAreaPlanted = ($totalAreaPlanted != 0) ? $totalCost / $totalAreaPlanted : 0;
-                $totalRiceProduction = LastProductionDatas::sum('yield_tons_per_kg');
+                $totalRiceProductionInkg = LastProductionDatas::sum('yield_tons_per_kg');
+                $totalRiceProduction = $totalRiceProductionInkg / 100000; // Convert to kilograms
+                $districts = AgriDistrict::all();
+                $totalfarm = DB::table('personal_informations')
+                    ->join('farm_profiles', 'farm_profiles.personal_informations_id', '=', 'personal_informations.id')
+                    ->where('farm_profiles.agri_districts', 'vitali')
+                    ->distinct()
+                    ->count('personal_informations.id');
+    
+                // Fetch filter inputs
+                $selectedCrop = $request->input('crop', 'Rice'); // Default to Rice if no crop is selected
+                $selectedDate = $request->input('harvestDate', ''); // Default to empty string if no date is selected
+                $selectedCycle = $request->input('croppingCycle', ''); // Default to empty string if no cycle is selected
+    
+                // Define static data for crops
+                $allData = [
+                    'Rice' => [
+                        'Ayala' => [
+                            'Inbrid' => 103,
+                            'Hybrid' => 99,
+                            'Not specified' => 1,
+                        ],
+                        'Culianan' => [
+                            'Inbrid' => 258,
+                            'Hybrid' => 24,
+                            'Not specified' => 13,
+                        ],
+                        'Curuan' => [
+                            'Inbrid' => 95,
+                            'Hybrid' => 26,
+                            'Not specified' => 1,
+                        ],
+                        'Manicahan' => [
+                            'Inbrid' => 258,
+                            'Hybrid' => 9,
+                            'Not specified' => 4,
+                        ],
+                        'Tumaga' => [
+                            'Inbrid' => 132,
+                            'Hybrid' => 78,
+                            'Not specified' => 0,
+                        ],
+                        'Vitali' => [
+                            'Inbrid' => 330,
+                            'Hybrid' => 0,
+                            'Not specified' => 0,
+                        ]
+                    ],
+                    'Corn' => [
+                        // Add data for Corn
+                    ],
+                    'Coconut' => [
+                        // Add data for Coconut
+                    ],
+                    'Other' => [
+                        // Add data for Other crops
+                    ]
+                ];
+    
+                // Get data based on selected crop
+                $data = $allData[$selectedCrop] ?? [];
+    
+                // Define yield data
+                $yieldData = [
+                    'Ayala' => ['yield' => 500, 'cycle' => 'Cycle 1', 'harvest_date' => '2024-01-01'],
+                    'Tumaga' => ['yield' => 600, 'cycle' => 'Cycle 1', 'harvest_date' => '2024-01-01'],
+                    'Culianan' => ['yield' => 550, 'cycle' => 'Cycle 1', 'harvest_date' => '2024-02-01'],
+                    'Manicahan' => ['yield' => 700, 'cycle' => 'Cycle 1', 'harvest_date' => '2024-03-01'],
+                    'Curuan' => ['yield' => 650, 'cycle' => 'Cycle 1', 'harvest_date' => '2024-01-01'],
+                    'Vitali' => ['yield' => 580, 'cycle' => 'Cycle 1', 'harvest_date' => '2024-01-01'],
+                ];
+    
+                // Filter yield data based on selected date and cropping cycle
+                if (!empty($selectedDate)) {
+                    $yieldData = array_filter($yieldData, function ($entry) use ($selectedDate) {
+                        return $entry['harvest_date'] === $selectedDate;
+                    });
+                }
+    
+                if (!empty($selectedCycle)) {
+                    $yieldData = array_filter($yieldData, function ($entry) use ($selectedCycle) {
+                        return $entry['cycle'] === $selectedCycle;
+                    });
+                }
+    
                 // Return the view with dashboard data
-                return view('admin.index', compact('admin', 'totalfarms', 'totalAreaPlanted', 'totalAreaYield', 'totalCost', 'yieldPerAreaPlanted', 'averageCostPerAreaPlanted','totalRiceProduction'));
+                return view('admin.index', compact(
+                    'data', 'yieldData', 'selectedCrop', 'selectedDate', 'selectedCycle', 'totalfarm', 'districts', 'admin',
+                    'totalfarms', 'totalAreaPlanted', 'totalAreaYield', 'totalCost', 'yieldPerAreaPlanted',
+                    'averageCostPerAreaPlanted', 'totalRiceProduction'
+                ));
             } else {
                 // Handle the case where the user is not found
-                // You can redirect the user or display an error message
                 return redirect()->route('login')->with('error', 'User not found.');
             }
         } else {
             // Handle the case where the user is not authenticated
-            // Redirect the user to the login page
             return redirect()->route('login');
         }
     }
     
+    // public function getFarmerReports($district)
+    // {
+    //     // Fetch farmer reports based on the selected district
+    //     $FarmersData = DB::table('personal_informations')
+    //         ->leftJoin('farm_profiles', 'farm_profiles.personal_informations_id', '=', 'personal_informations.id')
+    //         ->leftJoin('fixed_costs', 'fixed_costs.personal_informations_id', '=', 'personal_informations.id')
+    //         ->leftJoin('machineries_useds', 'machineries_useds.personal_informations_id', '=', 'personal_informations.id')
+    //         ->leftJoin('variable_costs', 'variable_costs.personal_informations_id', '=', 'personal_informations.id')
+    //         ->leftJoin('last_production_datas', 'last_production_datas.personal_informations_id', '=', 'personal_informations.id')
+    //         ->select(
+    //             'personal_informations.*',
+    //             'farm_profiles.*',
+    //             'fixed_costs.*',
+    //             'machineries_useds.*',
+    //             'variable_costs.*',
+    //             'last_production_datas.*'
+    //         )
+    //         ->where('farm_profiles.district', $district)
+    //         ->orderBy('personal_informations.id', 'desc')
+    //         ->get();
+
+    //     return response()->json($FarmersData);
+    // }
+
+
+
+
+
     public function AdminLogin(){
          return view('admin.admin_login');
     }//end
@@ -803,7 +917,7 @@ public function deleteusers($id) {
                // Calculate the total area planted in the "ayala" district
              $totalAreaPlantedAyala = DB::table('farm_profiles')
              ->where('agri_districts', 'ayala')
-             ->sum('total_physical_area_has');
+             ->sum('total_physical_area');
              $totalAreaYieldAyala = DB::table('farm_profiles')
              ->where('agri_districts', 'ayala')
              ->sum('yield_kg_ha');
@@ -884,7 +998,7 @@ public function deleteusers($id) {
  
                   // Assuming $personalinformation->date_of_birth contains the date of birth in "YYYY-MM-DD" format
       
-             $totalAreaPlanted = FarmProfile::sum('total_physical_area_has');
+             $totalAreaPlanted = FarmProfile::sum('total_physical_area');
              $totalAreaYield = FarmProfile::sum('yield_kg_ha');
              $totalCost= VariableCost::sum('total_variable_cost');
                  
@@ -981,7 +1095,7 @@ public function FarmerTumagainfo()
               // Calculate the total area planted in the "tumaga" district
             $totalAreaPlantedAyala = DB::table('farm_profiles')
             ->where('agri_districts', 'tumaga')
-            ->sum('total_physical_area_has');
+            ->sum('total_physical_area');
             $totalAreaYieldAyala = DB::table('farm_profiles')
             ->where('agri_districts', 'tumaga')
             ->sum('yield_kg_ha');
@@ -1062,7 +1176,7 @@ public function FarmerTumagainfo()
 
                  // Assuming $personalinformation->date_of_birth contains the date of birth in "YYYY-MM-DD" format
      
-            $totalAreaPlanted = FarmProfile::sum('total_physical_area_has');
+            $totalAreaPlanted = FarmProfile::sum('total_physical_area');
             $totalAreaYield = FarmProfile::sum('yield_kg_ha');
             $totalCost= VariableCost::sum('total_variable_cost');
                 
@@ -1158,7 +1272,7 @@ public function FarmerCulianansInfo()
               // Calculate the total area planted in the "culianan" district
             $totalAreaPlantedAyala = DB::table('farm_profiles')
             ->where('agri_districts', 'culianan')
-            ->sum('total_physical_area_has');
+            ->sum('total_physical_area');
             $totalAreaYieldAyala = DB::table('farm_profiles')
             ->where('agri_districts', 'culianan')
             ->sum('yield_kg_ha');
@@ -1239,7 +1353,7 @@ public function FarmerCulianansInfo()
 
                  // Assuming $personalinformation->date_of_birth contains the date of birth in "YYYY-MM-DD" format
      
-            $totalAreaPlanted = FarmProfile::sum('total_physical_area_has');
+            $totalAreaPlanted = FarmProfile::sum('total_physical_area');
             $totalAreaYield = FarmProfile::sum('yield_kg_ha');
             $totalCost= VariableCost::sum('total_variable_cost');
                 
@@ -1333,7 +1447,7 @@ public function FarmerCulianansInfo()
                       // Calculate the total area planted in the "manicahan" district
                     $totalAreaPlantedAyala = DB::table('farm_profiles')
                     ->where('agri_districts', 'manicahan')
-                    ->sum('total_physical_area_has');
+                    ->sum('total_physical_area');
                     $totalAreaYieldAyala = DB::table('farm_profiles')
                     ->where('agri_districts', 'manicahan')
                     ->sum('yield_kg_ha');
@@ -1414,7 +1528,7 @@ public function FarmerCulianansInfo()
         
                          // Assuming $personalinformation->date_of_birth contains the date of birth in "YYYY-MM-DD" format
              
-                    $totalAreaPlanted = FarmProfile::sum('total_physical_area_has');
+                    $totalAreaPlanted = FarmProfile::sum('total_physical_area');
                     $totalAreaYield = FarmProfile::sum('yield_kg_ha');
                     $totalCost= VariableCost::sum('total_variable_cost');
                         
@@ -1510,7 +1624,7 @@ public function FarmercuruanInfo()
               // Calculate the total area planted in the "curuan" district
             $totalAreaPlantedAyala = DB::table('farm_profiles')
             ->where('agri_districts', 'curuan')
-            ->sum('total_physical_area_has');
+            ->sum('total_physical_area');
             $totalAreaYieldAyala = DB::table('farm_profiles')
             ->where('agri_districts', 'curuan')
             ->sum('yield_kg_ha');
@@ -1591,7 +1705,7 @@ public function FarmercuruanInfo()
 
                  // Assuming $personalinformation->date_of_birth contains the date of birth in "YYYY-MM-DD" format
      
-            $totalAreaPlanted = FarmProfile::sum('total_physical_area_has');
+            $totalAreaPlanted = FarmProfile::sum('total_physical_area');
             $totalAreaYield = FarmProfile::sum('yield_kg_ha');
             $totalCost= VariableCost::sum('total_variable_cost');
                 
@@ -1681,14 +1795,14 @@ public function VitaliInfoFarmer()
             // Count the number of farmers in the "ayala" district
             $totalfarms = DB::table('personal_informations')
             ->join('farm_profiles', 'farm_profiles.personal_informations_id', '=', 'personal_informations.id')
-            ->where('farm_profiles.agri_districts', 'vitali')
+            ->where('farm_profiles.agri_districts', 'ayala')
             ->distinct()
             ->count('personal_informations.id');
 
               // Calculate the total area planted in the "vitali" district
             $totalAreaPlantedAyala = DB::table('farm_profiles')
             ->where('agri_districts', 'vitali')
-            ->sum('total_physical_area_has');
+            ->sum('total_physical_area');
             $totalAreaYieldAyala = DB::table('farm_profiles')
             ->where('agri_districts', 'vitali')
             ->sum('yield_kg_ha');
@@ -1769,7 +1883,7 @@ public function VitaliInfoFarmer()
 
                  // Assuming $personalinformation->date_of_birth contains the date of birth in "YYYY-MM-DD" format
      
-            $totalAreaPlanted = FarmProfile::sum('total_physical_area_has');
+            $totalAreaPlanted = FarmProfile::sum('total_physical_area');
             $totalAreaYield = FarmProfile::sum('yield_kg_ha');
             $totalCost= VariableCost::sum('total_variable_cost');
                 
@@ -2563,189 +2677,25 @@ return redirect()->route('login');
 
 public function CornSave(Request $request)
 {
-    // $validatedData = $request->validate([
-    //     // Validation rules
-    //     'field1' => 'required|string|max:255',
-    //     'field2' => 'required|string|max:255',
-    //     // Add validation rules for other fields
-    // ]);
+    $personalInformation = new PersonalInformations([
+        'name' => $request->input('name'),
+        'email' => $request->input('email'),
+        'phone' => $request->input('phone'),
+    ]);
+    $personalInformation->save();
 
-    DB::beginTransaction();
+    $farmProfile = new FarmProfile([
+        'personal_information_id' => $personalInformation->id,
+        'farm_name' => $request->input('farm_name'),
+        'location' => $request->input('location'),
+    ]);
+    $farmProfile->save();;
 
-    try {
-
-        
-        $existingPersonalInformations = PersonalInformations::where([
-            ['first_name', '=', $request->input('first_name')],
-            ['middle_name', '=', $request->input('middle_name')],
-            ['last_name', '=', $request->input('last_name')],
-           
-           
-        
-          
-            // Add other fields here
-        ])->first();
-        
-        if ($existingPersonalInformations) {
-            // FarmProfile with the given personal_informations_id and other fields already exists
-            // You can handle this scenario here, for example, return an error message
-            return redirect('/add-personal-info')->with('error', 'Farm Profile with this information already exists.');
-        }
-        
-        // $personalInformation= $request->validated();
-        // $personalInformation= $request->all();
-               $personalInformation= new PersonalInformations;
-            //    dd($request->all());
-         
-      // Check if a file is present in the request and if it's valid
-    if ($request->hasFile('image') && $request->file('image')->isValid()) {
-        // Retrieve the image file from the request
-        $image = $request->file('image');
-        
-        // Generate a unique image name using current timestamp and file extension
-        $imagename = time() . '.' . $image->getClientOriginalExtension();
-        
-        // Move the uploaded image to the 'personalInfoimages' directory with the generated name
-        $image->move('personalInfoimages', $imagename);
-        
-        // Set the image name in the PersonalInformation model
-        $personalInformation->image = $imagename;
-    } 
-                $personalInformation->users_id =$request->users_id;
-                $personalInformation->first_name= $request->first_name;
-                $personalInformation->middle_name= $request->middle_name;
-                $personalInformation->last_name=  $request->last_name;
-    
-                if ($request->extension_name === 'others') {
-                    $personalInformation->extension_name = $request->add_extName; // Use the value entered in the "add_extenstion name" input field
-               } else {
-                    $personalInformation->extension_name = $request->extension_name; // Use the selected color from the dropdown
-               }
-                $personalInformation->country=  $request->country;
-                $personalInformation->province=  $request->province;
-                $personalInformation->city=  $request->city;
-                $personalInformation->agri_district=  $request->agri_district;
-                $personalInformation->barangay=  $request->barangay;
-                
-                 $personalInformation->home_address=  $request->home_address;
-                 $personalInformation->sex=  $request->sex;
-    
-                 if ($request->religion=== 'other') {
-                    $personalInformation->religion= $request->add_Religion; // Use the value entered in the "religion" input field
-               } else {
-                    $personalInformation->religion= $request->religion; // Use the selected religion from the dropdown
-               }
-                 $personalInformation->date_of_birth=  $request->date_of_birth;
-                
-                 if ($request->place_of_birth=== 'Add Place of Birth') {
-                    $personalInformation->place_of_birth= $request->add_PlaceBirth; // Use the value entered in the "place_of_birth" input field
-               } else {
-                    $personalInformation->place_of_birth= $request->place_of_birth; // Use the selected place_of_birth from the dropdown
-               }
-                 $personalInformation->contact_no=  $request->contact_no;
-                 $personalInformation->civil_status=  $request->civil_status;
-                 $personalInformation->name_legal_spouse=  $request->name_legal_spouse;
-    
-                 if ($request->no_of_children=== 'Add') {
-                    $personalInformation->no_of_children= $request->add_noChildren; // Use the value entered in the "no_of_children" input field
-                    } else {
-                            $personalInformation->no_of_children= $request->no_of_children; // Use the selected no_of_children from the dropdown
-                    }
-        
-                 $personalInformation->mothers_maiden_name=  $request->mothers_maiden_name;
-                 if ($request->highest_formal_education=== 'Other') {
-                    $personalInformation->highest_formal_education= $request->add_formEduc; // Use the value entered in the "highest_formal_education" input field
-                    } else {
-                            $personalInformation->highest_formal_education= $request->highest_formal_education; // Use the selected highest_formal_education from the dropdown
-                    }
-                 $personalInformation->person_with_disability=  $request->person_with_disability;
-                 $personalInformation->pwd_id_no=  $request->pwd_id_no;
-                 $personalInformation->government_issued_id=  $request->government_issued_id;
-                 $personalInformation->id_type=  $request->id_type;
-                 $personalInformation->gov_id_no=  $request->gov_id_no;
-                 $personalInformation->member_ofany_farmers_ass_org_coop=  $request->member_ofany_farmers_ass_org_coop;
-                 
-                 if ($request->nameof_farmers_ass_org_coop === 'add') {
-                    $personalInformation->nameof_farmers_ass_org_coop = $request->add_FarmersGroup; // Use the value entered in the "add_extenstion name" input field
-               } else {
-                    $personalInformation->nameof_farmers_ass_org_coop = $request->nameof_farmers_ass_org_coop; // Use the selected color from the dropdown
-               }
-                 $personalInformation->name_contact_person=  $request->name_contact_person;
-          
-                 $personalInformation->cp_tel_no=  $request->cp_tel_no;
-                 $personalInformation->date_interview=  $request->date_interview;
-                 $personalInformation->crop_type=  $request->crop_type;
-                 $personalInformation->livestock_type=  $request->livestock_type;
-    
-    
-            
-                // dd($personalInformation);
-                 $personalInformation->save();
-        // Check if data is inserted
-        if (!$personalInformation->exists) {
-            throw new \Exception('Failed to insert data into TableName1');
-        }
-
-        $table2 = new TableName2();
-        $table2->column1 = $request->input('field3');
-        $table2->column2 = $request->input('field4');
-        $table2->save();
-
-        // Check if data is inserted
-        if (!$table2->exists) {
-            throw new \Exception('Failed to insert data into TableName2');
-        }
-
-        // // Repeat for other tables
-
-        // // Example for Table 3
-        // $table3 = new TableName3();
-        // $table3->column1 = $request->input('field5');
-        // $table3->column2 = $request->input('field6');
-        // $table3->save();
-
-        // if (!$table3->exists) {
-        //     throw new \Exception('Failed to insert data into TableName3');
-        // }
-
-        // // Example for Table 4
-        // $table4 = new TableName4();
-        // $table4->column1 = $request->input('field7');
-        // $table4->column2 = $request->input('field8');
-        // $table4->save();
-
-        // if (!$table4->exists) {
-        //     throw new \Exception('Failed to insert data into TableName4');
-        // }
-
-        // // Example for Table 5
-        // $table5 = new TableName5();
-        // $table5->column1 = $request->input('field9');
-        // $table5->column2 = $request->input('field10');
-        // $table5->save();
-
-        // if (!$table5->exists) {
-        //     throw new \Exception('Failed to insert data into TableName5');
-        // }
-
-        // // Example for Table 6
-        // $table6 = new TableName6();
-        // $table6->column1 = $request->input('field11');
-        // $table6->column2 = $request->input('field12');
-        // $table6->save();
-
-        // if (!$table6->exists) {
-        //     throw new \Exception('Failed to insert data into TableName6');
-        // }
-
-        DB::commit();
-        return redirect()->back()->with('success', 'Data saved successfully.');
-    } catch (\Exception $e) {
-        DB::rollback();
+ 
         // Log::error('Error saving form data: ' . $e->getMessage());
-        return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'An error occurred: ' );
     }
-}
+
 
 
     // patials form steps
@@ -3399,6 +3349,204 @@ public function CornSave(Request $request)
                         
                     }   
                 }
+
+                // public function GenFarmers(){
+                //     // Check if the user is authenticated
+                // if (Auth::check()) {
+                // // User is authenticated, proceed with retrieving the user's ID
+                // $userId = Auth::id();
+                
+                // // Find the user based on the retrieved ID
+                // $admin = User::find($userId);
+                
+                // if ($admin) {
+                //     // Assuming $user represents the currently logged-in user
+                //     $user = auth()->user();
+                
+                //     // Check if user is authenticated before proceeding
+                //     if (!$user) {
+                //         // Handle unauthenticated user, for example, redirect them to login
+                //         return redirect()->route('login');
+                //     }
+                
+                //     // Find the user's personal information by their ID
+                //     $profile = PersonalInformations::where('users_id', $userId)->latest()->first();
+                
+                //     // Fetch the farm ID associated with the user
+                //     $farmId = $user->farm_id;
+                
+                //     // Find the farm profile using the fetched farm ID
+                //     $farmProfile = FarmProfile::where('id', $farmId)->latest()->first();
+                
+               
+                //     $agriDistrict = AgriDistrict::all();
+                    
+                //     $totalRiceProduction = LastProductionDatas::sum('yield_tons_per_kg');
+                //     // Return the view with the fetched data
+                //     return view('admin.farmersdata.genfarmers', compact('userId','admin', 'profile', 
+                //     'farmProfile','totalRiceProduction','agriDistrict'
+                //     ,'userId'));
+                // } else {
+                //     // Handle the case where the user is not found
+                //     // You can redirect the user or display an error message
+                //     return redirect()->route('login')->with('error', 'User not found.');
+                // }
+                // } else {
+                // // Handle the case where the user is not authenticated
+                // // Redirect the user to the login page
+                // return redirect()->route('login');
+                // }
+                // }
+
+                
+
+
+
+        // view the personalinfo by admin
+        public function GenFarmers(Request $request)
+        {
+            // Check if the user is authenticated
+            if (Auth::check()) {
+                // User is authenticated, proceed with retrieving the user's ID
+                $userId = Auth::id();
+        
+                // Find the user based on the retrieved ID
+                $admin = User::find($userId);
+        
+                if ($admin) {
+                    // Assuming $user represents the currently logged-in user
+                    $user = auth()->user();
+        
+                    // Check if user is authenticated before proceeding
+                    if (!$user) {
+                        // Handle unauthenticated user, for example, redirect them to login
+                        return redirect()->route('login');
+                    }
+        
+                    // Find the user's personal information by their ID
+                    $profile = PersonalInformations::where('users_id', $userId)->latest()->first();
+        
+                    // Fetch all personal information
+                    $personalinfos = PersonalInformations::orderBy('id', 'asc');
+        
+                    // Search functionality
+                    if ($request->has('search')) {
+                        $keyword = $request->input('search');
+                        $personalinfos->where(function ($query) use ($keyword) {
+                            $query->where('last_name', 'like', "%$keyword%")
+                                  ->orWhere('first_name', 'like', "%$keyword%");
+                            // Add more search filters as needed
+                        });
+                    }
+        
+                    // Paginate the results
+                    $personalinfos = $personalinfos->paginate(4);
+
+                     // Fetch all farm profiles with their associated personal information and agricultural districts
+                        $farmProfiles = FarmProfile::select('farm_profiles.*')
+                        ->leftJoin('personal_informations', 'farm_profiles.personal_informations_id', '=', 'personal_informations.id')
+                        ->with('agriDistrict')
+                        ->orderBy('farm_profiles.id', 'asc');
+
+                    // Check if a search query is provided
+                    if ($request->has('search')) {
+                        $keyword = $request->input('search');
+                        // Apply search filters for last name and first name
+                        $farmProfiles->where(function ($query) use ($keyword) {
+                            $query->where('personal_informations.last_name', 'like', "%$keyword%")
+                                ->orWhere('personal_informations.first_name', 'like', "%$keyword%");
+                        });
+                    }
+
+                    // Paginate the results
+                    $farmProfiles = $farmProfiles->paginate(20);
+
+                      // Query for fixed costs with eager loading of related models
+                    $fixedcosts = FixedCost::with('personalinformation', 'farmprofile')
+                    ->orderBy('id', 'asc');
+
+                    // Apply search functionality
+                    if ($request->has('search')) {
+                        $keyword = $request->input('search');
+                        $fixedcosts->where(function ($query) use ($keyword) {
+                            $query->whereHas('personalinformation', function ($query) use ($keyword) {
+                                $query->where('last_name', 'like', "%$keyword%")
+                                    ->orWhere('first_name', 'like', "%$keyword%");
+                            });
+                        });
+                    }
+
+                    // Paginate the results
+                    $fixedcosts = $fixedcosts->paginate(20);
+
+                      // Query for fixed costs with eager loading of related models
+                            $machineries = MachineriesUseds::with('personalinformation', 'farmprofile')
+                            ->orderBy('id', 'asc');
+
+                        // Apply search functionality
+                        if ($request->has('search')) {
+                            $keyword = $request->input('search');
+                            $machineries->where(function ($query) use ($keyword) {
+                                $query->whereHas('personalinformation', function ($query) use ($keyword) {
+                                    $query->where('last_name', 'like', "%$keyword%")
+                                        ->orWhere('first_name', 'like', "%$keyword%");
+                                });
+                            });
+                        }
+
+                        // Paginate the results
+                        $machineries = $machineries->paginate(20);
+
+                            // Query for variable cost with search functionality
+                                $variable = VariableCost::with('personalinformation', 'farmprofile','seeds','labors','fertilizers','pesticides','transports')
+                                ->orderBy('id', 'asc');
+                
+                            // Apply search functionality
+                            if ($request->has('search')) {
+                                $keyword = $request->input('search');
+                                $variable->where(function ($query) use ($keyword) {
+                                    $query->whereHas('personalinformation', function ($query) use ($keyword) {
+                                        $query->where('last_name', 'like', "%$keyword%")
+                                            ->orWhere('first_name', 'like', "%$keyword%");
+                                    });
+                                });
+                            }
+                
+                            // Paginate the results
+                            $variable = $variable->paginate(20);
+
+                            // Query for fixed costs with eager loading of related models
+
+
+                            $productions = LastProductionDatas::with('personalinformation', 'farmprofile','agridistrict')
+                            ->orderBy('id', 'asc');
+
+                        // Apply search functionality
+                        if ($request->has('search')) {
+                            $keyword = $request->input('search');
+                            $productions->where(function ($query) use ($keyword) {
+                                $query->whereHas('personalinformation', function ($query) use ($keyword) {
+                                    $query->where('last_name', 'like', "%$keyword%")
+                                        ->orWhere('first_name', 'like', "%$keyword%");
+                                });
+                            });
+                        }
+
+                        // Paginate the results
+                        $productions = $productions->paginate(20);
+
+                    $totalRiceProduction = LastProductionDatas::sum('yield_tons_per_kg');
+                    // Return the view with the fetched data
+                    return view('admin.farmersdata.genfarmers', compact('admin', 'profile', 'personalinfos','farmProfiles','fixedcosts','machineries','variable','productions','totalRiceProduction'));
+                } else {
+                    // Handle the case where the user is not found
+                    // You can redirect the user or display an error message
+                    return redirect()->route('login')->with('error', 'User not found.');
+                }
+            } else {
+                // Handle the case where the user is not authenticated
+                // Redirect the user to the login page
+                return redirect()->route('login');
+            }
+        }
 }
-
-

@@ -2,54 +2,90 @@
 
 @section('admin')
 
+<style>
+  /* Custom style for the dropdown width */
+  .custom-dropdown {
+      width: 2px; /* Adjust the width as needed */
+  }
 
+  .custom-card {
+    height: 100px; /* Adjust height as needed */
+    width: 80px;  /* Adjust width as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Adjust padding as needed */
+}
+
+.custom-card h4 {
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
+</style>
 <div class="page-content">
  
   <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
   
     <div>
-      <h4 class="mb-3 mb-md-0 " style="font-size: 19px;align-items:center;"> Zamboanga City Rice Industry Dashboard</h4>
+      <h4 class="mb-3 mb-md-0 " style="font-size: 19px;align-items:center;"> Zambo-AgriMap Dashboard</h4>
     </div>
     <div class="d-flex align-items-center flex-wrap text-nowrap">
-      <div class="dropdown me-2 mb-2 mb-md-0">
-          <button class="btn btn-primary dropdown-toggle" type="button" id="districtDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              Select District
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="districtDropdown">
-              <li><a class="dropdown-item" href="#" data-district="Ayala District">Ayala</a></li>
-              <li><a class="dropdown-item" href="#" data-district="Tumaga District">Tumaga</a></li>
-              <li><a class="dropdown-item" href="#" data-district="Culianan District">Culianan</a></li>
-              <li><a class="dropdown-item" href="#" data-district="Manicahan District">Manicahan</a></li>
-              <li><a class="dropdown-item" href="#" data-district="Curuan District">Curuan</a></li>
-              <li><a class="dropdown-item" href="#" data-district="Vitali District">Vitali</a></li>
-          </ul>
-      </div>
-      
-     
-      <div class="dropdown me-2 mb- mb-md-0">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="yearlyReportDropdown" data-toggle="dropdown" aria-expanded="false">
-           Yearly 
+      {{-- <div class="dropdown me-2 mb-2 mb-md-0">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="districtDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Select District
         </button>
-        <ul class="dropdown-menu" aria-labelledby="yearlyReportDropdown">
-            <li><a class="dropdown-items" href="#" data-report="2023">2023</a></li>
-            <li><a class="dropdown-items" href="#" data-report="2022">2022</a></li>
-            <!-- Add more yearly reports as needed -->
+        <ul class="dropdown-menu" aria-labelledby="districtDropdown">
+          @foreach ($districts as $district )
+          <li><a class="dropdown-item" href="#" data-district={{$district->district}}>{{$district->district}}</a></li>
+          @endforeach
+          
         </ul>
-    </div>
+      </div> --}}
+    
+    <!-- Modal -->
+<div class="modal fade" id="districtModal" tabindex="-1" aria-labelledby="districtModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="districtModalLabel">District Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id="districtName"></p>
 
-    <div class="dropdown me-2 mb- mb-md-0">
-      <button class="btn btn-primary dropdown-toggle" type="button" id="yearlyReportDropdown" data-toggle="dropdown" aria-expanded="false">
-         Tenurial
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="yearlyReportDropdown">
-          <li><a class="dropdown-items" href="#" data-report="2023">Owner</a></li>
-          <li><a class="dropdown-items" href="#" data-report="2022">Owner-Tiller</a></li>
-          <li><a class="dropdown-items" href="#" data-report="2023">Tenant</a></li>
-          <li><a class="dropdown-items" href="#" data-report="2022">Tiller</a></li>
-          <li><a class="dropdown-items" href="#" data-report="2022">Lease</a></li>
-          <!-- Add more yearly reports as needed -->
-      </ul>
+        <label for="tenurialStatus" class="form-label">Select Tenurial Status:</label>
+          <select id="tenurialStatus" class="form-select form-select-modern mb-3">
+            <option value="all">All</option>
+            <option value="owner">Owner</option>
+            <option value="tenant">Tenant</option>
+            <option value="tiller">Tiller</option>
+            <option value="lease">Lease</option>
+          </select>
+        <p id="numberOfFarmers"></p>
+        <p id="totalAreaPlanted"></p>
+        <p id="totalAreaYield"></p>
+        <p id="totalCost"></p>
+        <p id="avgYieldPerArea"></p>
+        <p id="avgCostPerArea"></p>
+        <p id="seasonFarmersProduction"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
+
+
+      </div>
+
+
   
     {{-- <div class="dropdown me-2 mb-2 mb-md-0">
         <button class="btn btn-primary dropdown-toggle" type="button" id="monthlyReportDropdown" data-toggle="dropdown" aria-expanded="false">
@@ -125,229 +161,104 @@
   
 
   <div class="row">
-    <div class="col-12 col-xl-12 stretch-card">
-      <div class="row flex-grow-1">
-        <div class="col-md-4 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-baseline">
-                <h6 class="card-title mb-0">Total Numbers of Farmers</h6>
-                <div class="dropdown mb-2">
-                  <a type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="eye" class="icon-sm me-2"></i> <span class="">View</span></a>
-                   
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="printer" class="icon-sm me-2"></i> <span class="">Print</span></a>
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="download" class="icon-sm me-2"></i> <span class="">Download</span></a>
-                  
-                  </div>
+    <div class="col-12 stretch-card">
+        <div class="row flex-grow-1">
+          <div class="col-md-4 grid-margin stretch-card">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline">
+                        <h6 class="card-title mb-0">Total Numbers of Farmers</h6>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="text-center">
+                            <h4 class="mb-2">{{ number_format($totalfarms, 2) }}</h4>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-6 col-md-12 col-xl-5"><br>
-                  <h3 class="mb-2">{{ number_format($totalfarms, 2) }}</h3>
-                  <div class="d-flex align-items-baseline">
-                    {{-- <p class="text-success">
-                      <span>+3.3%</span>
-                      <i data-feather="arrow-up" class="icon-sm mb-1"></i>
-                    </p> --}}
-                  </div>
-                </div>
-                <div class="col-6 col-md-12 col-xl-7">
-                  <div id="totalFarmsChart" class="mt-md-3 mt-xl-0"></div>
-                </div>
-              </div>
             </div>
-          </div>
         </div>
         <div class="col-md-4 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-baseline">
-                <h6 class="card-title mb-0">Total Area PLanted</h6>
-                <div class="dropdown mb-2">
-                  <a type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="eye" class="icon-sm me-2"></i> <span class="">View</span></a>
-                  
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="printer" class="icon-sm me-2"></i> <span class="">Print</span></a>
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="download" class="icon-sm me-2"></i> <span class="">Download</span></a>
+          <div class="card custom-card">
+              <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-baseline">
+                      <h6 class="card-title mb-0">Total Area Planted</h6>
                   </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6 col-md-12 col-xl-5"><br>
-                  <h3 class="mb-2">{{ number_format($totalAreaPlanted, 2) }}</h3>
-                  <div class="d-flex align-items-baseline">
-                    {{-- <p class="text-danger">
-                      <span>-2.8%</span>
-                      <i data-feather="arrow-down" class="icon-sm mb-1"></i>
-                    </p> --}}
+                  <div class="d-flex justify-content-center align-items-center">
+                      <div class="text-center">
+                          <h4 class="mb-2">{{ number_format($totalAreaPlanted, 2) }}</h4>
+                      </div>
                   </div>
-                </div>
-                {{-- <div class="col-6 col-md-12 col-xl-7">
-                  <div id="ordersChart" class="mt-md-3 mt-xl-0"></div>
-                </div> --}}
               </div>
-            </div>
           </div>
-        </div>
-        <div class="col-md-4 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-baseline">
-                <h6 class="card-title mb-0">Total Area Yield(Kg/Ha)</h6>
-                <div class="dropdown mb-2">
-                  <a type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="eye" class="icon-sm me-2"></i> <span class="">View</span></a>
-                   
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="printer" class="icon-sm me-2"></i> <span class="">Print</span></a>
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="download" class="icon-sm me-2"></i> <span class="">Download</span></a>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6 col-md-12 col-xl-5"><br>
-                  <h3 class="mb-2">{{ number_format($totalAreaYield, 2) }}</h3>
-                  <div class="d-flex align-items-baseline">
-                    {{-- <p class="text-success">
-                      <span>+2.8%</span>
-                      <i data-feather="arrow-up" class="icon-sm mb-1"></i>
-                    </p> --}}
-                  </div>
-                </div>
-                {{-- <div class="col-6 col-md-12 col-xl-7">
-                  <div id="growthChart" class="mt-md-3 mt-xl-0"></div>
-                </div> --}}
-              </div>
-              
-            </div>
-          </div>
-        </div>
       </div>
+
+      <div class="col-md-4 grid-margin stretch-card">
+        <div class="card custom-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-baseline">
+                    <h6 class="card-title mb-0">Total Area Yield (Kg/Ha)</h6>
+                </div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="text-center">
+                        <h4 class="mb-2">{{ number_format($totalAreaYield, 2) }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div> <!-- row -->
+           
+  
+          <div class="col-md-4 grid-margin stretch-card">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-baseline">
+                        <h6 class="card-title mb-0">Total Cost</h6>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="text-center">
+                            <h4 class="mb-2">Php {{ number_format($totalCost, 2) }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         
+        <div class="col-md-4 grid-margin stretch-card">
+          <div class="card custom-card">
+              <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-baseline">
+                      <h6 class="card-title mb-0">Ave.Yield/Area Planted (Kg/Ha)</h6>
+                  </div>
+                  <div class="d-flex justify-content-center align-items-center">
+                      <div class="text-center">
+                          <h4 class="mb-2">{{ number_format($yieldPerAreaPlanted, 2) }}</h4>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div class="col-md-4 grid-margin stretch-card">
+        <div class="card custom-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-baseline">
+                    <h6 class="card-title mb-0">Variety Planted/Districts</h6>
+                </div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="text-center">
+                        <h4 class="mb-2">{{ number_format($yieldPerAreaPlanted, 2) }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+
   
 
-  <div class="row">
-    <div class="col-12 col-xl-12 stretch-card">
-      <div class="row flex-grow-1">
-        <div class="col-md-4 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-baseline">
-                <h6 class="card-title mb-0">Total Cost</h6>
-                <div class="dropdown mb-2">
-                  <a type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="eye" class="icon-sm me-2"></i> <span class="">View</span></a>
-                  
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="printer" class="icon-sm me-2"></i> <span class="">Print</span></a>
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="download" class="icon-sm me-2"></i> <span class="">Download</span></a>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6 col-md-12 col-xl-5"><br>
-                  <h3 class="mb-2">{{ number_format($totalCost, 2) }}</h3>
-                  <div class="d-flex align-items-baseline">
-                    {{-- <p class="text-success">
-                      <span>+3.3%</span>
-                      <i data-feather="arrow-up" class="icon-sm mb-1"></i>
-                    </p> --}}
-                  </div>
-                </div>
-                {{-- <div class="col-6 col-md-12 col-xl-7">
-                  <div id="customersChart" class="mt-md-3 mt-xl-0"></div>
-                </div> --}}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-baseline">
-                <h6 class="card-title mb-0">Average  Yield  Per Area Planted (Kg/Ha)</h6>
-                <div class="dropdown mb-2">
-                  <a type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="eye" class="icon-sm me-2"></i> <span class="">View</span></a>
-                   
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="printer" class="icon-sm me-2"></i> <span class="">Print</span></a>
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="download" class="icon-sm me-2"></i> <span class="">Download</span></a>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6 col-md-12 col-xl-5"><br>
-                  <h3 class="mb-2">{{ number_format($yieldPerAreaPlanted, 2) }}</h3>
-                  <div class="d-flex align-items-baseline">
-                    {{-- <p class="text-danger">
-                      <span>-2.8%</span>
-                      <i data-feather="arrow-down" class="icon-sm mb-1"></i>
-                    </p> --}}
-                  </div>
-                </div>
-                {{-- <div class="col-6 col-md-12 col-xl-7">
-                  <div id="ordersChart" class="mt-md-3 mt-xl-0"></div>
-                </div> --}}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-baseline">
-                <h6 class="card-title mb-0">Average Cost Per Area Planted(Ha)</h6>
-                <div class="dropdown mb-2">
-                  <a type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="eye" class="icon-sm me-2"></i> <span class="">View</span></a>
-                
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="printer" class="icon-sm me-2"></i> <span class="">Print</span></a>
-                    <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="download" class="icon-sm me-2"></i> <span class="">Download</span></a>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6 col-md-12 col-xl-5"><br>
-                  <h3 class="mb-1">{{ number_format($averageCostPerAreaPlanted, 2) }}</h3>
-                  <div class="d-flex align-items-baseline">
-                    {{-- <p class="text-success">
-                      <span>+2.8%</span>
-                      <i data-feather="arrow-up" class="icon-sm mb-1"></i>
-                    </p> --}}
-                  </div>
-                </div>
-                {{-- <div class="col-6 col-md-12 col-xl-7">
-                  <div id="growthChart" class="mt-md-3 mt-xl-0"></div>
-                </div> --}}
-              </div>
-              
-            </div>
-          </div>
-        </div>
-
-        
-      
-      </div>
-    </div>
-  </div> <!-- row -->
+  
       
 
   <div class="row">
@@ -355,24 +266,30 @@
       <div class="card">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-baseline mb-2">
-            <h6 class="card-title mb-0">Farmers Yearly</h6>
-            <div class="dropdown mb-2">
-              <a type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
-                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="eye" class="icon-sm me-2"></i> <span class="">View</span></a>
-              
-                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="printer" class="icon-sm me-2"></i> <span class="">Print</span></a>
-                <a class="dropdown-item d-flex align-items-center" href="javascript:;"><i data-feather="download" class="icon-sm me-2"></i> <span class="">Download</span></a>
-              </div>
-            </div>
+            <h6 class="card-title mb-0">Farmers Variety Planted/Districts</h6>
+           
           </div>
           
-          <div id="monthlySalesChart"></div>
+          <div style="width: 80%; margin: auto;">
+            <form id="cropForm" action="{{ url('/admin/dashboard') }}" method="GET" class="mb-4">
+                <label for="crop" class="form-label">Select Crop:</label>
+                <select class="form-select" name="crop" id="crop" onchange="document.getElementById('cropForm').submit();">
+                    <option value="Rice" {{ $selectedCrop == 'Rice' ? 'selected' : '' }}>Rice</option>
+                    <option value="Corn" {{ $selectedCrop == 'Corn' ? 'selected' : '' }}>Corn</option>
+                    <option value="Coconut" {{ $selectedCrop == 'Coconut' ? 'selected' : '' }}>Coconut</option>
+                    <option value="Other" {{ $selectedCrop == 'Other' ? 'selected' : '' }}>Other</option>
+                </select>
+            </form>
+            <div id="monthlySalesChart"></div>
+        </div>
+    
         </div> 
       </div>
     </div>
+
+
+
+    
     <div class="col-lg-5 col-xl-4 grid-margin stretch-card">
       <div class="card">
           <div class="card-body">
@@ -384,14 +301,93 @@
       </div>
   </div>
 
-  
+  <div style="width: 80%; margin: auto;">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-baseline mb-2">
+                <h6 class="card-title mb-0">Farmers Yields/Districts</h6>
+            </div>
+            
+            <form id="filterForm" action="{{ url('/admin/dashboard') }}" method="GET" class="mb-4">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="crop" class="form-label">Select Crop:</label>
+                        <select class="form-select custom-dropdown" name="crop" id="crop" onchange="document.getElementById('filterForm').submit();">
+                            <option value="Rice" {{ $selectedCrop == 'Rice' ? 'selected' : '' }}>Rice</option>
+                            <option value="Corn" {{ $selectedCrop == 'Corn' ? 'selected' : '' }}>Corn</option>
+                            <option value="Coconut" {{ $selectedCrop == 'Coconut' ? 'selected' : '' }}>Coconut</option>
+                            <option value="Other" {{ $selectedCrop == 'Other' ? 'selected' : '' }}>Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="harvestDate" class="form-label">Harvested Date:</label>
+                        <input type="date" class="form-control" name="harvestDate" id="harvestDate" value="{{ $selectedDate }}" onchange="document.getElementById('filterForm').submit();">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="croppingCycle" class="form-label">Cropping Cycle:</label>
+                        <select class="form-select custom-dropdown" name="croppingCycle" id="croppingCycle" onchange="document.getElementById('filterForm').submit();">
+                            <option value="">Select Cycle</option>
+                            <option value="Cycle 1" {{ $selectedCycle == 'Cycle 1' ? 'selected' : '' }}>Cycle 1</option>
+                            <option value="Cycle 2" {{ $selectedCycle == 'Cycle 2' ? 'selected' : '' }}>Cycle 2</option>
+                            <option value="Cycle 3" {{ $selectedCycle == 'Cycle 3' ? 'selected' : '' }}>Cycle 3</option>
+                            <!-- Add more cycles as needed -->
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div id="yieldPieChart"></div>
+        </div>
+    </div>
+</div>
   </div>  
 
       </div>
     </div>
   </div> <!-- row -->
 <div class="production" ></div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      var yieldData = @json($yieldData);  // This should be the data fetched based on filters
 
+      // If no data is available, handle that case
+      if (!yieldData || Object.keys(yieldData).length === 0) {
+          document.querySelector("#yieldPieChart").innerHTML = "<p>No data available for the selected filters.</p>";
+          return;
+      }
+
+      var districts = Object.keys(yieldData);
+      var yieldValues = districts.map(district => yieldData[district]['yield'] || 0);
+
+      var options = {
+          chart: {
+              type: 'pie',
+              height: 350
+          },
+          series: yieldValues,
+          labels: districts.map(d => d + ' District'),
+          colors: ['#1E90FF', '#FF4500', '#32CD32', '#FFD700', '#8A2BE2', '#FF69B4'],
+          legend: {
+              position: "bottom",
+          },
+          dataLabels: {
+              enabled: true,
+              style: {
+                  fontSize: '14px',
+              },
+          },
+          tooltip: {
+              y: {
+                  formatter: function (val) {
+                      return val + " kg/ha";
+                  }
+              }
+          }
+      }
+
+      var apexPieChart = new ApexCharts(document.querySelector("#yieldPieChart"), options);
+      apexPieChart.render();
+  });
+</script>
 <script>
   function printReport() {
       // Apply print styles
@@ -468,107 +464,224 @@
   
   </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+{{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script src="https://cdn.jsdelivr.net/npm/@sgratzl/chartjs-chart-geo@latest"></script>
 
-<script>
-function printReport() {
-    window.print();
-}
 
-function showSection(sectionId) {
-    // Hide all sections first
-    document.querySelectorAll('.report-section').forEach(section => {
-        section.style.display = 'none';
-    });
-    // Show the selected section
-    document.getElementById(sectionId).style.display = 'block';
-}
-
-// Optionally, a function to show all sections
-function showAllSections() {
-    document.querySelectorAll('.report-section').forEach(section => {
-        section.style.display = 'block';
-    });
-}
- first
-showSection('personal_info');
-
-
-
-</script>
 
   <!-- Include Bootstrap Bundle with Popper -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> --}}
   <!-- Include Feather Icons -->
   <script src="https://unpkg.com/feather-icons"></script>
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          // Initialize feather icons
-          feather.replace();
+  
+{{-- <script>
+ <?php
+    // Fetch the data for manicahan from your database or any other source
+    // $manicahanData = $totalfarm;
+    ?>
+document.addEventListener('DOMContentLoaded', function() {
+  const districtDropdownItems = document.querySelectorAll('.dropdown-item');
+  const districtNameElement = document.getElementById('districtName');
+  const numberOfFarmersElement = document.getElementById('numberOfFarmers');
+  const totalAreaPlantedElement = document.getElementById('totalAreaPlanted');
+  const totalAreaYieldElement = document.getElementById('totalAreaYield');
+  const totalCostElement = document.getElementById('totalCost');
+  const avgYieldPerAreaElement = document.getElementById('avgYieldPerArea');
+  const avgCostPerAreaElement = document.getElementById('avgCostPerArea');
+  const seasonFarmersProductionElement = document.getElementById('seasonFarmersProduction');
+  const tenurialStatusSelect = document.getElementById('tenurialStatus');
+  const manicahan = <?php echo json_encode($manicahanData); ?>;
+  const data = {
+    'ayala': {
+      all: {
+        numberOfFarmers: manicahan,
+        totalAreaPlanted: 500,
+        totalAreaYield: 2000,
+        totalCost: 10000,
+        avgYieldPerArea: 4,
+        avgCostPerArea: 20,
+        seasonFarmersProduction: 'Spring'
+      },
+      owner: { /* specific data for owners */ },
+      tenant: { /* specific data for tenants */ },
+      tiller: { /* specific data for tillers */ },
+      lease: { /* specific data for lease */ }
+    },
+    'tumaga': {
+      all: {
+        numberOfFarmers: manicahan,
+        totalAreaPlanted: 56,
+        totalAreaYield: 2000,
+        totalCost: 10000,
+        avgYieldPerArea: 4,
+        avgCostPerArea: 20,
+        seasonFarmersProduction: 'Spring'
+      },
+      owner: { /* specific data for owners */ },
+      tenant: { /* specific data for tenants */ },
+      tiller: { /* specific data for tillers */ },
+      lease: { /* specific data for lease */ }
+    },
+    // ... other districts data
+  };
 
-          // Get the dropdown menu and items
-          const dropdownMenu = document.getElementById('districtDropdown');
-          const dropdownItems = document.querySelectorAll('.dropdown-item');
-          const districtModal = new bootstrap.Modal(document.getElementById('districtModal'));
-          const districtInfo = document.getElementById('districtInfo');
+  function updateModal(district, tenurialStatus) {
+    const districtData = data[district];
+    if (!districtData) {
+      console.error(`No data available for ${district}`);
+      return;
+    }
 
-          // Add click event listener to each dropdown item
-          dropdownItems.forEach(item => {
-              item.addEventListener('click', function(event) {
-                  event.preventDefault();
-                  const selectedDistrict = this.getAttribute('data-district');
-                  dropdownMenu.textContent = selectedDistrict;
-                  console.log('Selected District:', selectedDistrict);
-                  
-                  // Update the modal content
-                  districtInfo.textContent = `Information about ${selectedDistrict}`;
-                  
-                  // Show the modal
-                  districtModal.show();
-              });
-          });
-      });
+    const tenurialData = districtData[tenurialStatus];
+    if (!tenurialData) {
+      console.error(`No tenurial status data available for ${tenurialStatus} in ${district}`);
+      return;
+    }
 
+    districtNameElement.textContent = district;
+    numberOfFarmersElement.textContent = `Number of Farmers: ${tenurialData.numberOfFarmers}`;
+    totalAreaPlantedElement.textContent = `Total Area Planted: ${tenurialData.totalAreaPlanted}`;
+    totalAreaYieldElement.textContent = `Total Area Yield (Kg/Ha): ${tenurialData.totalAreaYield}`;
+    totalCostElement.textContent = `Total Cost: ${tenurialData.totalCost}`;
+    avgYieldPerAreaElement.textContent = `Average Yield Per Area Planted (Kg/Ha): ${tenurialData.avgYieldPerArea}`;
+    avgCostPerAreaElement.textContent = `Average Cost Per Area Planted (Ha): ${tenurialData.avgCostPerArea}`;
+    seasonFarmersProductionElement.textContent = `Season Farmers Production: ${tenurialData.seasonFarmersProduction}`;
+  }
 
-      document.addEventListener('DOMContentLoaded', function() {
-          // Initialize feather icons
-          feather.replace();
+  districtDropdownItems.forEach(item => {
+    item.addEventListener('click', function() {
+      const selectedDistrict = this.getAttribute('data-district');
+      const selectedTenurialStatus = tenurialStatusSelect.value;
+      updateModal(selectedDistrict, selectedTenurialStatus);
+      const districtModal = new bootstrap.Modal(document.getElementById('districtModal'));
+      districtModal.show();
+    });
+  });
 
-          // Get the dropdown menu and items
-          const dropdownMenu = document.getElementById('yearlyReportDropdown');
-          const dropdownItems = document.querySelectorAll('.dropdown-items');
-          const yearlyReportModal = new bootstrap.Modal(document.getElementById('yearlyReportModal'));
-          const yearlyReportInfo = document.getElementById('yearlyReportInfo');
-
-          // Add click event listener to each dropdown item
-          dropdownItems.forEach(item => {
-              item.addEventListener('click', function(event) {
-                  event.preventDefault();
-                  const selectedReport = this.getAttribute('data-report');
-                  dropdownMenu.textContent = selectedReport;
-                  console.log('Selected District:', selectedReport);
-                  
-                  // Update the modal content
-                  yearlyReportInfo.textContent = `Information about ${selectedReport}`;
-                  
-                  // Show the modal
-                  yearlyReportModal.show();
-              });
-          });
-      });
-      
-      // function printReport() {
-      //     console.log('Print report function called.');
-      //     // Implement print functionality
-      // }
+  tenurialStatusSelect.addEventListener('change', function() {
+    const selectedDistrict = document.getElementById('districtName').textContent;
+    if (selectedDistrict) {
+      updateModal(selectedDistrict, this.value);
+    }
+  });
+});
 
 
 
-//   </script>
+</script> --}}
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var data = @json($data);
+
+            var districts = Object.keys(data);
+            var inbrid = districts.map(district => data[district]['Inbrid']);
+            var hybrid = districts.map(district => data[district]['Hybrid']);
+            var notSpecified = districts.map(district => data[district]['Not specified']);
+
+            var options = {
+                chart: {
+                    type: 'bar',
+                    height: '318',
+                    parentHeightOffset: 0,
+                    toolbar: {
+                        show: false
+                    },
+                },
+                theme: {
+                    mode: 'light'
+                },
+                tooltip: {
+                    theme: 'light'
+                },
+                colors: ['#28a745', '#17a2b8', '#ffc107'],
+                fill: {
+                    opacity: .9
+                },
+                grid: {
+                    padding: {
+                        bottom: -4
+                    },
+                    borderColor: '#dee2e6',
+                    xaxis: {
+                        lines: {
+                            show: true
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'Inbrid',
+                        data: inbrid
+                    },
+                    {
+                        name: 'Hybrid',
+                        data: hybrid
+                    },
+                    {
+                        name: 'Not specified',
+                        data: notSpecified
+                    }
+                ],
+                xaxis: {
+                    type: 'category',
+                    categories: districts.map(d => d + ' District'),
+                    axisBorder: {
+                        color: '#28a745',
+                    },
+                    axisTicks: {
+                        color: '#28a745',
+                    },
+                },
+                yaxis: {
+                    title: {
+                        text: 'Number of Farms',
+                        style: {
+                            size: 9,
+                            color: '#28a745'
+                        }
+                    },
+                },
+                legend: {
+                    show: true,
+                    position: "top",
+                    horizontalAlign: 'center',
+                    itemMargin: {
+                        horizontal: 8,
+                        vertical: 0
+                    },
+                },
+                stroke: {
+                    width: 0
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontSize: '10px',
+                    },
+                    offsetY: -27
+                },
+                plotOptions: {
+                    bar: {
+                        columnWidth: "50%",
+                        borderRadius: 4,
+                        dataLabels: {
+                            position: 'top',
+                            orientation: 'vertical',
+                        }
+                    },
+                },
+            }
+
+            var apexBarChart = new ApexCharts(document.querySelector("#monthlySalesChart"), options);
+            apexBarChart.render();
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 
 
 

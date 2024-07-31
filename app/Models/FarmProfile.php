@@ -59,7 +59,10 @@ class FarmProfile extends Model
   'personal_informations_id',
     ];
 
-
+    public function crops()
+    {
+        return $this->hasMany(Crop::class, 'farm_profiles_id');
+    }
     public function lastProduction()
     {
         return $this->hasMany(LastProductionDatas::class, 'farm_profiles_id');

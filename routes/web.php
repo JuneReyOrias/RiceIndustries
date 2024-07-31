@@ -55,7 +55,23 @@ use App\Models\AgriDistrict;
 // })->middleware(['auth', 'verified'])->name('dashboard'); 
 
 
+// view production
+Route::get('/admin-view-Farmers-samplefolder',[PersonalInformationsController ::class,'samplefolder'])->name('admin.farmersdata.samplefolder.farm_edit');
 
+
+
+
+// view production
+Route::get('/admin-view-Farmers-productions/{cropData}',[PersonalInformationsController ::class,'productionview'])->name('admin.farmersdata.production');
+
+
+// view crop
+Route::get('/admin-view-Farmers-crop/{farmData}',[PersonalInformationsController ::class,'cropview'])->name('admin.farmersdata.crop');
+
+// view farm
+Route::get('/admin-view-Farmers-farm/{personalinfos}',[PersonalInformationsController ::class,'farmview'])->name('admin.farmersdata.farm');
+// view farmerse data
+Route::get('/admin-view-General-Farmers',[AdminController::class,'GenFarmers'])->name('admin.farmersdata.genfarmers');
  // admin  add barangay form
  Route::get('/admin-add-homepage-setting',[LandingPageController::class,'addHomepage'])->name('landing-page.add_homepage');
  Route::get('/admin-view-notification',[NotificationController::class,'addnotification'])->name('admin.notification.view_notif');
@@ -472,7 +488,7 @@ Route::middleware(['auth','role:admin','PreventBackHistory'])->group(function(){
     Route::post('/admin-profile', [AdminController::class, 'update']);
     
 });//end Group admin middleware
-
+Route::get('/farmer-reports/{district}', [AdminController::class, 'getFarmerReports']);
 Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login');
 
 // create new accounts by admin access

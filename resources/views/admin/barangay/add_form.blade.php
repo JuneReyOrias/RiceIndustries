@@ -324,10 +324,10 @@
                         
                         <div class="input-box">
                             <span class="details">AgriDistrict</span>
-                            <select class="form-control light-gray-placeholder" name="agri_districts_id" id="agri_districts_id">
+                            <select class="form-control light-gray-placeholder" name="agri_district" id="agri_districts_id">
                                 <!-- Options populated dynamically from your server-side code -->
                                 @foreach ($agriDistrict as $agri)
-                                    <option value="{{ $agri->id }}">{{ $agri->district }}</option>
+                                    <option value="{{ $agri->district  }}">{{ $agri->district }}</option>
                                 @endforeach
                             </select>
                         </div>

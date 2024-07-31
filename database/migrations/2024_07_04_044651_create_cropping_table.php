@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('production_id')->nullable();
             $table->foreignId('variable_cost_id')->nullable();
             $table->foreignId('livestock_production_id')->nullable();
-            $table->double('no_cropping',10,2);
+           
             $table->timestamps();
         });
     }

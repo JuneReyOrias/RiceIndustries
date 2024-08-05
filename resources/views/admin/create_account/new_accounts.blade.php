@@ -91,12 +91,12 @@
                           
                           </select>
                         </div>
-                        <button type="submit"  class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0">
-                          Sign up
-                        </button>
                       </div>
                  
-
+                      <div class="button">
+                        <input type="submit" value="Register">
+                      </div>
+                      <a  href="{{route('admin.create_account.display_users')}}"button  class="btn btn-success ">Back</button></a></p>
                     </form>
                   </div>
                 </div>

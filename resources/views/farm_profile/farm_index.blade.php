@@ -314,7 +314,9 @@
 
                     <!-- Step 1: Farm Profile -->
                     <div class="step active" id="step2">
-                      <h2>Update Farm Profile</h2>
+                        <h2>New Farm Profile</h2><br>
+                        <p class="text-success">Provide clear and concise responses to each section, ensuring accuracy and relevance. If certain information is not applicable, write N/A.</p><br>
+                      
                       <div id="farmProfiles"></div>
                       <div id="buttonsContainer" class="mt-3">
                           <button type="button" class="btn btn-primary mt-2" onclick="addFarmProfile()">Add Farm Profile</button>

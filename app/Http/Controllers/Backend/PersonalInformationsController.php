@@ -297,94 +297,145 @@ if ($request->hasFile('image') && $request->file('image')->isValid()) {
 } 
     
 
-           // production view
-           public function  productionview (Request $request, $id)
-           {
-               // Check if the user is authenticated
-               if (Auth::check()) {
-                   // User is authenticated, proceed with retrieving the user's ID
-                   $userId = Auth::id();
+        // view the personalinfo by admin
+            // production view
+        public function  productionview (Request $request, $id)
+{
+    // Check if the user is authenticated
+    if (Auth::check()) {
+        // User is authenticated, proceed with retrieving the user's ID
+        $userId = Auth::id();
+
+        // Find the user based on the retrieved ID
+        $admin = User::find($userId);
+
+        if ($admin) {
+            // Assuming $user represents the currently logged-in user
+            $user = auth()->user();
+
+            // Check if user is authenticated before proceeding
+            if (!$user) {
+                // Handle unauthenticated user, for example, redirect them to login
+                return redirect()->route('login');
+            }
+
+            // Find the user's personal information by their ID
+            $profile = PersonalInformations::where('users_id', $userId)->latest()->first();
+
+            // Fetch the farm ID associated with the user
+            $farmId = $user->farm_id;
+            $agri_district = $user->agri_district;
+            $agri_districts_id = $user->agri_districts_id;
+
+                    // Find the farm profile using the fetched farm ID
+                    $farmProfile = FarmProfile::where('id', $farmId)->latest()->first();
+                    $farmData = FarmProfile::find($id);
+                // Fetch farmer's information based on ID
+                $cropData = Crop::find($id);
+                $cropName = $request->input('crop_name');
+
+                // Fetch farm profile data
+             
+            
+                //  Fetch all crop data or filter based on the selected crop name
+                 if ($cropName && $cropName != 'All') {
+                    $cropData = Crop::where('farm_profiles_id', $id)
+                                    ->where('crop_name', $cropName)
+                                    
+                                    ->get();
+                } else {
+                    $cropData = Crop::where('farm_profiles_id', $id)
+                                    ->with( 'farmprofile')
+                                    ->get();
+                }
+                $productionData = LastProductionDatas::where('crops_farms_id', $id)
+                                                ->with('crop')
+                                                ->get();
            
-                   // Find the user based on the retrieved ID
-                   $admin = User::find($userId);
+               
+                // fixed cost
+                $FixedData = FixedCost::where('last_production_datas_id', $id)
            
-                   if ($admin) {
-                       // Assuming $user represents the currently logged-in user
-                       $user = auth()->user();
+                ->get();
+
+                $machineriesData =MachineriesUseds::where('last_production_datas_id', $id)
            
-                       // Check if user is authenticated before proceeding
-                       if (!$user) {
-                           // Handle unauthenticated user, for example, redirect them to login
-                           return redirect()->route('login');
-                       }
+                ->get();
+                $variableData =VariableCost::where('last_production_datas_id', $id)
            
-                       // Find the user's personal information by their ID
-                       $profile = PersonalInformations::where('users_id', $userId)->latest()->first();
-           
-                       // Fetch the farm ID associated with the user
-                       $farmId = $user->farm_id;
-                       $agri_district = $user->agri_district;
-                       $agri_districts_id = $user->agri_districts_id;
-           
-                               // Find the farm profile using the fetched farm ID
-                               $farmProfile = FarmProfile::where('id', $farmId)->latest()->first();
-                               $farmData = FarmProfile::find($id);
-                           // Fetch farmer's information based on ID
-                           $cropData = Crop::find($id);
-                           $cropName = $request->input('crop_name');
-           
-                           // Fetch farm profile data
-                        
-                       
-                           //  Fetch all crop data or filter based on the selected crop name
-                            if ($cropName && $cropName != 'All') {
-                               $cropData = Crop::where('farm_profiles_id', $id)
-                                               ->where('crop_name', $cropName)
-                                               
-                                               ->get();
-                           } else {
-                               $cropData = Crop::where('farm_profiles_id', $id)
-                                               ->with( 'farmprofile')
-                                               ->get();
-                           }
-                           $productionData = LastProductionDatas::where('crops_farms_id', $id)
-                                                           ->with('crop')
-                                                           ->get();
-                      
-                          
-                           // fixed cost
-                           $FixedData = FixedCost::where('last_production_datas_id', $id)
-                      
-                           ->get();
-           
-                           $machineriesData =MachineriesUseds::where('last_production_datas_id', $id)
-                      
-                           ->get();
-                           $variableData =VariableCost::where('last_production_datas_id', $id)
-                      
-                           ->get();
-                 
-           
-                       
-                       $totalRiceProduction = LastProductionDatas::sum('yield_tons_per_kg');
-                       // Return the view with the fetched data
-                       return view('admin.farmersdata.production', compact('admin', 'profile', 'farmProfile','totalRiceProduction'
-                       ,'userId','agri_district','agri_districts_id','cropData','id','productionData','FixedData'
-                       ,'farmData','machineriesData','variableData'
-                       ));
-                   } else {
-                       // Handle the case where the user is not found
-                       // You can redirect the user or display an error message
-                       return redirect()->route('login')->with('error', 'User not found.');
-                   }
-               } else {
-                   // Handle the case where the user is not authenticated
-                   // Redirect the user to the login page
-                   return redirect()->route('login');
-               }
-           }
-           
-           
+                ->get();
+      
+
+            
+            $totalRiceProduction = LastProductionDatas::sum('yield_tons_per_kg');
+            // Return the view with the fetched data
+            return view('admin.farmersdata.production', compact('admin', 'profile', 'farmProfile','totalRiceProduction'
+            ,'userId','agri_district','agri_districts_id','cropData','id','productionData','FixedData'
+            ,'farmData','machineriesData','variableData'
+            ));
+        } else {
+            // Handle the case where the user is not found
+            // You can redirect the user or display an error message
+            return redirect()->route('login')->with('error', 'User not found.');
+        }
+    } else {
+        // Handle the case where the user is not authenticated
+        // Redirect the user to the login page
+        return redirect()->route('login');
+    }
+}
+        
+        // edit page for admin
+        public function  PersonalInfoEdit($id)
+        {
+            // Check if the user is authenticated
+            if (Auth::check()) {
+                // User is authenticated, proceed with retrieving the user's ID
+                $userId = Auth::id();
+        
+                // Find the user based on the retrieved ID
+                $admin = User::find($userId);
+        
+                if ($admin) {
+                    // Assuming $user represents the currently logged-in user
+                    $user = auth()->user();
+        
+                    // Check if user is authenticated before proceeding
+                    if (!$user) {
+                        // Handle unauthenticated user, for example, redirect them to login
+                        return redirect()->route('login');
+                    }
+        
+                    // Find the user's personal information by their ID
+                    $profile = PersonalInformations::where('users_id', $userId)->latest()->first();
+        
+                    // Fetch the farm ID associated with the user
+                    $farmId = $user->farm_id;
+                    $agri_district = $user->agri_district;
+                    $agri_districts_id = $user->agri_districts_id;
+                    // Find the farm profile using the fetched farm ID
+                    $farmProfile = FarmProfile::where('id', $farmId)->latest()->first();
+                    $personalinfos= PersonalInformations::find($id);
+              
+        
+                    
+                    $totalRiceProduction = LastProductionDatas::sum('yield_tons_per_kg');
+                    // Return the view with the fetched data
+                    return view('personalinfo.edit_info', compact('admin', 'profile', 'farmProfile','totalRiceProduction'
+                    ,'personalinfos','userId','agri_district','agri_districts_id'
+                    
+                    ));
+                } else {
+                    // Handle the case where the user is not found
+                    // You can redirect the user or display an error message
+                    return redirect()->route('login')->with('error', 'User not found.');
+                }
+            } else {
+                // Handle the case where the user is not authenticated
+                // Redirect the user to the login page
+                return redirect()->route('login');
+            }
+        }
         // new update store by admin FOR PERSONAL INFO
         public function PersonalInfoUpdate(Request $request,$id)
         {

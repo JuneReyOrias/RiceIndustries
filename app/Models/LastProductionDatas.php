@@ -11,6 +11,8 @@ class LastProductionDatas extends Model
     protected $table="last_production_datas";
     protected $fillable=[
         'users_id',
+        
+        'crops_farms_id', 
         'personal_informations_id',
         'farm_profiles_id',
         'agri_districts_id',
@@ -32,6 +34,10 @@ class LastProductionDatas extends Model
         'gross_income_palay',
         'gross_income_rice',
     ];
+    public function crop()
+    {
+        return $this->belongsTo(Crop::class, 'crops_farms_id');
+    }
     public function farmprofiles()
     {
         return $this->belongsTo(FarmProfile::class, 'farm_profiles_id','id')->withDefault();

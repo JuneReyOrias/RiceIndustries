@@ -40,4 +40,8 @@ class Crop extends Model
     {
         return $this->belongsTo(LastProductionDatas::class, 'crops_farms_id');
     }
+    public function lastProductionData()
+    {
+        return $this->hasMany(LastProductionDatas::class, 'crops_farms_id');
+    }
 }

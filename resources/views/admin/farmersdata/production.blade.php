@@ -107,23 +107,25 @@
                            
 
                             </div>
-                            <form method="GET" action="{{ route('admin.farmersdata.crop', $farmData->id) }}">
+                         
                                 <div class="user-details">
-      
-                                    <div class="input-box">
-                                        <select lass="form-control light-gray-placeholder" name="crop_name" id="selectCrop" onchange="this.form.submit()">
-                                            
-                                            <option value="All" {{ request('crop_name') == 'All' ? 'selected' : '' }}>Crop Name</option>
-                                            @foreach($cropData->pluck('crop_name')->unique() as $cropName)
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <a href="{{route('admin.farmersdata.genfarmers')}}" title="back">
+        
+                                         </a>
+                                      
+                                            <div class="input-group mb-3">
+        
+                                                <h5 for="personainfo">Crop: {{ $productionData->first()->crop->crop_name ?? 'N/A' }}</h5>
+                                             
                                            
-                                                <option value="{{ $cropName }}" {{ request('crop_name') == $cropName ? 'selected' : '' }}>
-                                                    {{ $cropName }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                        </div>
+                                   
+        
+                                    </div
+                                  >
                                 </div>
-                            </form>
+                       
                             
                             <div class="table-responsive">
                                 <table class="table table-bordered datatable">
@@ -372,23 +374,23 @@
                            
 
                             </div>
-                            <form method="GET" action="{{ route('admin.farmersdata.crop', $farmData->id) }}">
-                                <div class="user-details">
-      
-                                    <div class="input-box">
-                                        <select lass="form-control light-gray-placeholder" name="crop_name" id="selectCrop" onchange="this.form.submit()">
-                                            
-                                            <option value="All" {{ request('crop_name') == 'All' ? 'selected' : '' }}>Crop Name</option>
-                                            @foreach($cropData->pluck('crop_name')->unique() as $cropName)
-                                           
-                                                <option value="{{ $cropName }}" {{ request('crop_name') == $cropName ? 'selected' : '' }}>
-                                                    {{ $cropName }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                            <div class="user-details">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a href="{{route('admin.farmersdata.genfarmers')}}" title="back">
+    
+                                     </a>
+                                  
+                                        <div class="input-group mb-3">
+    
+                                            <h5 for="personainfo">Crop: {{ $productionData->first()->crop->crop_name ?? 'N/A' }}</h5>
+                                         
+                                       
                                     </div>
-                                </div>
-                            </form>
+                               
+    
+                                </div
+                              >
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered datatable">
                                     <!-- Table content here -->
@@ -549,23 +551,23 @@
                            
 
                             </div>
-                            <form method="GET" action="{{ route('admin.farmersdata.crop', $farmData->id) }}">
-                                <div class="user-details">
-      
-                                    <div class="input-box">
-                                        <select lass="form-control light-gray-placeholder" name="crop_name" id="selectCrop" onchange="this.form.submit()">
-                                            
-                                            <option value="All" {{ request('crop_name') == 'All' ? 'selected' : '' }}>Crop Name</option>
-                                            @foreach($cropData->pluck('crop_name')->unique() as $cropName)
-                                           
-                                                <option value="{{ $cropName }}" {{ request('crop_name') == $cropName ? 'selected' : '' }}>
-                                                    {{ $cropName }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                            <div class="user-details">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a href="{{route('admin.farmersdata.genfarmers')}}" title="back">
+    
+                                     </a>
+                                  
+                                        <div class="input-group mb-3">
+    
+                                            <h5 for="personainfo">Crop: {{ $productionData->first()->crop->crop_name ?? 'N/A' }}</h5>
+                                         
+                                       
                                     </div>
-                                </div>
-                            </form>
+                               
+    
+                                </div
+                              >
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered datatable">
                                     <!-- Table content here -->
@@ -812,23 +814,23 @@
                            
 
                             </div>
-                            <form method="GET" action="{{ route('admin.farmersdata.crop', $farmData->id) }}">
-                                <div class="user-details">
-      
-                                    <div class="input-box">
-                                        <select lass="form-control light-gray-placeholder" name="crop_name" id="selectCrop" onchange="this.form.submit()">
-                                            
-                                            <option value="All" {{ request('crop_name') == 'All' ? 'selected' : '' }}>Crop Name</option>
-                                            @foreach($cropData->pluck('crop_name')->unique() as $cropName)
-                                           
-                                                <option value="{{ $cropName }}" {{ request('crop_name') == $cropName ? 'selected' : '' }}>
-                                                    {{ $cropName }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                            <div class="user-details">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a href="{{route('admin.farmersdata.genfarmers')}}" title="back">
+    
+                                     </a>
+                                  
+                                        <div class="input-group mb-3">
+    
+                                            <h5 for="personainfo">Crop: {{ $productionData->first()->crop->crop_name ?? 'N/A' }}</h5>
+                                         
+                                       
                                     </div>
-                                </div>
-                            </form>
+                               
+    
+                                </div
+                              >
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered datatable">
                                     <!-- Table content here -->

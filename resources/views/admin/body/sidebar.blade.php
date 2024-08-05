@@ -525,7 +525,7 @@
             <i class="link-arrow" data-feather="chevron-down"></i>
           </a>
           <div class="collapse" id="general-pages">
-            <ul class="nav sub-menu"style="padding-left:12px;">
+            <ul class="nav sub-menu"style="padding-left:70px;">
               <li class="nav-item">
                 <a href="{{route('admin.create_account.display_users')}}" class="nav-link">Users</a>
               </li>

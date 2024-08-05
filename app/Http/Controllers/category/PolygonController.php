@@ -5,6 +5,7 @@ namespace App\Http\Controllers\category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PolygonRequest;
 use App\Models\AgriDistrict;
+use App\Models\CropCategory;
 use App\Models\FarmProfile;
 use App\Models\Fertilizer;
 use App\Models\Labor;
@@ -167,7 +168,7 @@ public function  polygonshow(Request $request)
                 $searchTerm = $request->input('search');
                 $polygonsQuery->where('poly_name', 'like', "%$searchTerm%");
             }
-            $polygons = $polygonsQuery->orderBy('id','asc')->paginate(10);
+            $polygons = $polygonsQuery->orderBy('id','asc')->paginate(4);
           
             // Query for labors with search functionality
                 $parcelsQuery = ParcellaryBoundaries::query();
@@ -191,7 +192,7 @@ public function  polygonshow(Request $request)
                                   ->orWhere('total_cost_AgriDistrict', 'like', "%$searchTerm%");
                           });
                       }
-                      $AgriDistrict = $AgriDistrictQuery->orderBy('id','asc')->paginate(10);
+                      $AgriDistrict = $AgriDistrictQuery->orderBy('id','asc')->paginate(4);
 
                       // Query for pesticides with search functionality
                     $pesticidesQuery =  Pesticide::query();
@@ -217,28 +218,26 @@ public function  polygonshow(Request $request)
                     }
                     $transports = $transportsQuery->orderBy('id','asc')->paginate(10);
 
-                    // Query for variable cost with search functionality
-                    $variable = VariableCost::with('personalinformation', 'farmprofile','seeds','labors','AgriDistrict','pesticides','transports')
-                    ->orderBy('id', 'asc');
-    
-                // Apply search functionality
-                if ($request->has('search')) {
-                    $keyword = $request->input('search');
-                    $variable->where(function ($query) use ($keyword) {
-                        $query->whereHas('personalinformation', function ($query) use ($keyword) {
-                            $query->where('last_name', 'like', "%$keyword%")
-                                  ->orWhere('first_name', 'like', "%$keyword%");
+                    // CROP CATEGORY
+                    $CropCatQuery =  CropCategory::query();
+                    if ($request->has('search')) {
+                        $searchTerm = $request->input('search');
+                        $CropCatQuery->where(function($query) use ($searchTerm) {
+                            $query->where('crop_name', 'like', "%$searchTerm%")
+                             
+                                ->orWhere('type_of_variety', 'like', "%$searchTerm%");
                         });
-                    });
-                }
-    
-                // Paginate the results
-                $variable = $variable->paginate(20);
+                    }
+                    $CropCat = $CropCatQuery->orderBy('id','asc')->paginate(4);
+                    $cropVarieties = CropCategory::all()->groupBy('crop_name');
+            
+          
            
             $totalRiceProduction = LastProductionDatas::sum('yield_tons_per_kg');
 
             // Return the view with the fetched data
-            return view('polygon.polygons_show', compact('userId','admin','polygons', 'profile', 'parcels','AgriDistrict','pesticides','transports','variable', 'totalRiceProduction'));
+            return view('polygon.polygons_show', compact('userId','admin','polygons', 'profile', 'parcels','AgriDistrict','pesticides',
+           'CropCat','cropVarieties','transports', 'totalRiceProduction'));
         } else {
             // Handle the case where the user is not found
             // You can redirect the user or display an error message

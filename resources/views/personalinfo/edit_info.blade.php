@@ -464,7 +464,7 @@
                                 <div class="input-box">
                                     <label for="rice_farm_address_0">Rice Farm Address:</label>
                                     <input type="text" class="form-control" name="farm_profiles[0][rice_farm_address]" id="rice_farm_address_0" required>
-                                </div>
+                -                </div>
                                 <div class="input-box">
                                     <label for="no_of_years_as_farmers_0">Number of Years as Farmer:</label>
                                     <input type="number" class="form-control" name="farm_profiles[0][no_of_years_as_farmers]" id="no_of_years_as_farmers_0" required>

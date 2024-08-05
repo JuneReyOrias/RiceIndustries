@@ -22,12 +22,19 @@
     justify-content: center;
     align-items: center;
     padding: 20px; /* Adjust padding as needed */
+    border: 1px solid transparent; /* Initial transparent border */
+    border-image: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)); /* Gradient for border */
+ 
 }
 
 .custom-card h4 {
     margin-top: 20px; /* Adjust margin as needed */
+    
 }
-
+.custom-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   
+}
 </style>
 <div class="page-content">
  

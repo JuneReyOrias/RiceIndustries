@@ -56,7 +56,7 @@
                                     @endforeach
 
                                 </div>
-                                <a href="" title="Add farm">
+                                <a href="{{route('farm_profile.farm_index')}}" title="Add farm">
                                     <button class="btn btn-success btn-sm">
                                         <i class="fa fa-plus" aria-hidden="true"></i>
                                     </button>

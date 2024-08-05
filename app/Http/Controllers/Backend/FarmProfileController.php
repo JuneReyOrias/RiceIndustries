@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Optional;
 use App\Models\KmlFile;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\CropCategory;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,12 +47,13 @@ class FarmProfileController extends Controller
                         $user_id = $user->id;
                         $agri_districts = $user->agri_district;
                         $agri_districts_id = $user->agri_districts_id;
-
+                        $cropVarieties = CropCategory::all()->groupBy('crop_name');
                         // Find the user by their ID and eager load the personalInformation relationship
                         $profile = PersonalInformations::where('users_id', $userId)->latest()->first();
                         $totalRiceProduction = LastProductionDatas::sum('yield_tons_per_kg');
                         // Return the view with the fetched data
-                        return view('farm_profile.farm_index', compact('agri_districts', 'agri_districts_id', 'admin', 'profile','totalRiceProduction','userId'));
+                        return view('farm_profile.farm_index', compact('agri_districts', 'agri_districts_id', 'admin', 'profile',
+                        'totalRiceProduction','userId','cropVarieties'));
                     } else {
                         // Handle the case where the user is not found
                         // You can redirect the user or display an error message
@@ -357,14 +358,14 @@ public function Gmap(Request $request)
 
     // insertion of new data into farm profile table by admin
 
-public function store(FarmProfileRequest $request)
+public function store(Request $request)
 {
     try {
         // Get authenticated user
         $user = auth()->user();
 
         // Validate the incoming request data
-        $data = $request->validated();
+        // $data = $request->validated();
 
         // Check if FarmProfile with the given personal_informations_id already exists
         $existingFarmProfile = FarmProfile::where('personal_informations_id', $request->input('personal_informations_id'))->first();
@@ -404,7 +405,7 @@ public function store(FarmProfileRequest $request)
         $farmProfile->oca_district_office = $request->oca_district_office;
         $farmProfile->name_technicians = $request->name_technicians;
         $farmProfile->date_interview = $request->date_interview;
-        // dd($farmProfile);
+        dd($farmProfile);
         // Save the new FarmProfile
         $farmProfile->save();
 
@@ -532,47 +533,48 @@ public function store(FarmProfileRequest $request)
     }
     
     // agent farm profile update data
-        public function UpdateFarmProfiles(FarmProfileRequest $request,$id)
+        public function UpdateFarmProfiles(Request $request,$id)
         {
         
             try{
                 
     
-                $data= $request->validated();
-                $data= $request->all();
+                // $data= $request->validated();
+                // $data= $request->all();
                 
                 $data= FarmProfile::find($id);
 
                
                 $data->users_id = $request->users_id;
                 $data->personal_informations_id = $request->personal_informations_id;
-                $data->agri_districts_id = $request->agri_districts_id;
+             
+              
                 $data->agri_districts = $request->agri_districts;
                 $data->tenurial_status = $request->tenurial_status === 'Add' ? $request->add_newTenure : $request->tenurial_status;
-                $data->rice_farm_address = $request->rice_farm_address;
+                $data->farm_address = $request->farm_address;
                 $data->no_of_years_as_farmers = $request->no_of_years_as_farmers === 'Add' ? $request->add_newFarmyears : $request->no_of_years_as_farmers;
                 $data->gps_longitude = $request->gps_longitude;
                 $data->gps_latitude = $request->gps_latitude;
-                $data->total_physical_area_has = $request->total_physical_area_has;
-                $data->rice_area_cultivated_has = $request->rice_area_cultivated_has;
+                $data->total_physical_area = $request->total_physical_area;
+                $data->total_area_cultivated = $request->total_area_cultivated;
                 $data->land_title_no = $request->land_title_no;
                 $data->lot_no = $request->lot_no;
                 $data->area_prone_to = $request->area_prone_to === 'Add Prone' ? $request->add_newProneYear : $request->area_prone_to;
                 $data->ecosystem = $request->ecosystem === 'Add ecosystem' ? $request->Add_Ecosystem : $request->ecosystem;
-                $data->type_rice_variety = $request->type_rice_variety;
-                $data->prefered_variety = $request->prefered_variety;
-                $data->plant_schedule_wetseason = $request->plant_schedule_wetseason;
-                $data->plant_schedule_dryseason = $request->plant_schedule_dryseason;
-                $data->no_of_cropping_yr = $request->no_of_cropping_yr === 'Adds' ? $request->add_cropyear : $request->no_of_cropping_yr;
-                $data->yield_kg_ha = $request->yield_kg_ha;
-                $data->rsba_register = $request->rsba_register;
+                // $data->type_rice_variety = $request->type_rice_variety;
+                // $data->prefered_variety = $request->prefered_variety;
+                // $data->plant_schedule_wetseason = $request->plant_schedule_wetseason;
+                // $data->plant_schedule_dryseason = $request->plant_schedule_dryseason;
+                // $data->no_of_cropping_yr = $request->no_of_cropping_yr === 'Adds' ? $request->add_cropyear : $request->no_of_cropping_yr;
+                // $data->yield_kg_ha = $request->yield_kg_ha;
+                $data->rsba_registered = $request->rsba_registered;
                 $data->pcic_insured = $request->pcic_insured;
                 $data->government_assisted = $request->government_assisted;
                 $data->source_of_capital = $request->source_of_capital === 'Others' ? $request->add_sourceCapital : $request->source_of_capital;
                 $data->remarks_recommendation = $request->remarks_recommendation;
                 $data->oca_district_office = $request->oca_district_office;
-                $data->name_technicians = $request->name_technicians;
-                $data->date_interview = $request->date_interview;
+                $data->name_of_field_officer_technician = $request->name_of_field_officer_technician;
+                $data->date_interviewed = $request->date_interviewed;
 
                 // Handle image upload
             if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -582,15 +584,15 @@ public function store(FarmProfileRequest $request)
                 $data->image = $imageName;
             }
 
-                // dd($data);
+                dd($data);
                 $data->save();     
                 
             // Redirect back with success message
-            return redirect('/admin-view-personalinfo')->with('message', 'Farm Profile Data updated successfully');
+            return redirect()->back()->with('message', 'Farm Profile Data updated successfully');
     
     }catch(\Exception $ex){
    
-                // dd($ex); // Debugging statement to inspect the exception
+                dd($ex); // Debugging statement to inspect the exception
                 return redirect('/update-farmprofile/{farmprofiles}')->with('message','Someting went wrong');
                 
             }   

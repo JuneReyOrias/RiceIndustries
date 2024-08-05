@@ -7,7 +7,8 @@ use App\Models\Categorize;
 use App\Models\CropCategory;
 use App\Models\LastProductionDatas;
 use Illuminate\Http\Request;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 class CropCategoryController extends Controller
 {
     /**
@@ -18,20 +19,36 @@ class CropCategoryController extends Controller
         //
     }
 
+
+
     public function CropCategory()
     {
-       $Cat= Categorize::all();
-       $totalRiceProduction = LastProductionDatas::sum('yield_tons_per_kg');
-       $CropCat= CropCategory::orderBy('id','desc')->paginate(10);
-     return view('crop_category.crop_create',compact('Cat','totalRiceProduction','CropCat'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            // User is authenticated, proceed with retrieving the user's ID
+            $userId = Auth::id();
+    
+            // Find the user based on the retrieved ID
+            $admin = User::find($userId);
+    
+            if ($admin) {
+                // Assuming you have additional logic to fetch dashboard data
+             
+            
+              
+                $totalRiceProduction = LastProductionDatas::sum('yield_tons_per_kg');
+                // Return the view with dashboard data
+                return view('crop_category.crop_create', compact('userId','admin','totalRiceProduction'));
+            } else {
+                // Handle the case where the user is not found
+                // You can redirect the user or display an error message
+                return redirect()->route('login')->with('error', 'User not found.');
+            }
+        } else {
+            // Handle the case where the user is not authenticated
+            // Redirect the user to the login page
+            return redirect()->route('login');
+        }
     }
     public function Cropping()
     {
@@ -45,21 +62,26 @@ class CropCategoryController extends Controller
     {
         try{
         
-            // $data= $request->validated();
-            // $data= $request->all();
-           CropCategory::create([
-            'agri_districts_id' => $request->input('agri_districts_id'),
-            'categorizes_id' => $request->input('categorizes_id'),
-                'crop_name' => $request->input('crop_name'),
-                'crop_descript' => $request->input('crop_descript'),
-           ]);
-    
-            return redirect('/crops-category')->with('message','Crop Category added successsfully');
+          
+            $addCrop= new CropCategory();
+            $addCrop->users_id = $request->users_id;
+            // $addCrop->crop_name =$request->crop_name;
+            if ($request->crop_name === 'Add') {
+                $addCrop->crop_name = $request->new_crop_name; // Use the value entered in the "add_extenstion name" input field
+           } else {
+                $addCrop->crop_name = $request->crop_name; // Use the selected color from the dropdown
+           }
+            $addCrop->type_of_variety =$request->type_of_variety;
+        
+            // $addCrop->altitude =$request->altitude;
+            // dd($addCrop);
+            $addCrop->save();
+            return redirect('/admin-add-new-crop')->with('message','Crop Category added successsfully');
         
         }
         catch(\Exception $ex){
             dd($ex); // Debugging statement to inspect the exception
-            return redirect('/crops-category')->with('message','Someting went wrong');
+            return redirect('/admin-add-new-crop')->with('message','Someting went wrong');
             
         }   
     }
@@ -114,19 +136,19 @@ class CropCategoryController extends Controller
     public function destroy(string $id)
     {
         try {
-            $agridistricts = CropCategory::where('id', $id);
+            $addCrop = CropCategory::where('id', $id);
         
-            if ($agridistricts) {
-                $agridistricts->delete();
-                return redirect()->route('personalinfo.create')
-                                 ->with('message', 'Personal Informations deleted successfully');
+            if ($addCrop) {
+                $addCrop->delete();
+                return redirect()->route('polygon.polygons_show')
+                                 ->with('message', 'Crop Category deleted successfully');
             } else {
-                return redirect()->route('personalinfo.create')
-                                 ->with('message', 'Personal Informations not found');
+                return redirect()->route('polygon.polygons_show')
+                                 ->with('message', 'Crop Category not found');
             }
         } catch (\Exception $e) {
-            return redirect()->route('personalinfo.create')
-                             ->with('message', 'Error deleting Personal Informations : ' . $e->getMessage());
+            return redirect()->route('polygon.polygons_show')
+                             ->with('message', 'Error deleting Crop Category : ' . $e->getMessage());
         }
     }
 }

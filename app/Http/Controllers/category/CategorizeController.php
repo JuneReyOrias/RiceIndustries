@@ -113,17 +113,17 @@ class CategorizeController extends Controller
                     }
                     $CropCat = $CropCatQuery->orderBy('id','asc')->paginate(10);
     
-                          // Query for fertilizer with search functionality
-                          $FisheriesCatQuery = FisheriesCategory::query();
-                          if ($request->has('search')) {
-                              $searchTerm = $request->input('search');
-                              $FisheriesCatQuery->where(function($query) use ($searchTerm) {
-                                  $query->where('name_of_fertilizer', 'like', "%$searchTerm%")
-                                      ->orWhere('no_ofsacks', 'like', "%$searchTerm%")
-                                      ->orWhere('total_cost_fertilizers', 'like', "%$searchTerm%");
-                              });
-                          }
-                          $FisheriesCat = $FisheriesCatQuery->orderBy('id','asc')->paginate(10);
+                        //   // Query for fertilizer with search functionality
+                        //   $FisheriesCatQuery = FisheriesCategory::query();
+                        //   if ($request->has('search')) {
+                        //       $searchTerm = $request->input('search');
+                        //       $FisheriesCatQuery->where(function($query) use ($searchTerm) {
+                        //           $query->where('name_of_fertilizer', 'like', "%$searchTerm%")
+                        //               ->orWhere('no_ofsacks', 'like', "%$searchTerm%")
+                        //               ->orWhere('total_cost_fertilizers', 'like', "%$searchTerm%");
+                        //       });
+                        //   }
+                        //   $FisheriesCat = $FisheriesCatQuery->orderBy('id','asc')->paginate(10);
     
                           // Query for pesticides with search functionality
                         $livestockQuery =  livestockCategory::query();

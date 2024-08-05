@@ -451,8 +451,8 @@ Route::post('/fisheriescategory/create',[FisheriesCategoryController::class, 'st
 // Route::get('/fisheriescategory/create',[CategorizeController::class, 'FisheriesCategory'])->name('fisheries_category.fisheries_create');
 
 //crop-category
-Route::get('/crops-category', [CropCategoryController:: class,'CropCategory'])->name('crop_category.crop_create');
-Route::post('/crops-category',[CropCategoryController::class, 'store']);
+Route::get('/admin-add-new-crop', [CropCategoryController:: class,'CropCategory'])->name('crop_category.crop_create');
+Route::post('/admin-add-new-crop',[CropCategoryController::class, 'store']);
 // Route::get('/crops-category', [CategorizeController:: class,'CropCategory'])->name('crop_category.crop_create');
 
 //catgorize router

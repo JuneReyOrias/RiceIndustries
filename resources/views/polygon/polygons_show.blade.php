@@ -491,7 +491,96 @@
                                                  </ul>
                                              </div>
                      
+
+                                                         {{-- crop categroy look up table--}}
+                                                         <input type="radio" name="tabs" id="cropCategory" checked="checked">
+                                                         <label for="cropCategory">Crop</label>
+                                                         <div class="tab">
+                                                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                                 <div class="input-group mb-3">
+                                                                     <h5>c. Crop Category</h5>
+                                                                 </div>
+                                                                <div class="me-md-1">
+                                                                        <!-- Button trigger modal -->
+                                                                        <div class="me-md-1">
+                                                                            <a href="{{ route('crop_category.crop_create') }}" class="btn btn-success">Add</a>
+                                                                        </div>
+                                                                    </div>
+                                        
+                                                                 <form id="farmProfileSearchForm" action="{{ route('polygon.polygons_show') }}" method="GET">
+                                                                     <div class="input-group mb-3">
+                                                                         <input type="text" class="form-control" placeholder="Search" name="search" id="searchInput">
+                                                                         <button class="btn btn-outline-success" type="submit">Search</button>
+                                                                     </div>
+                                                                 </form>
+                                                                 <form id="showAllForm" action="{{ route('polygon.polygons_show') }}" method="GET">
+                                                                     <button class="btn btn-outline-success" type="submit">All</button>
+                                                                 </form>
+                                                             </div>
+            
+            
+                             
+                                                             <div class="table-responsive">
+                                                                 <table class="table table-bordered datatable">
+                                                                     <!-- Table content here -->
+                                                                     <thead class="thead-light">
+                                                                         <tr >
+                                                                             
+                                                                               <th>#</th>
+                                                                               <th>Crop Name</th>
+                                                                               <th>Crop type</th>
+                                                                          
+                                                                        
+                                                                               <th>Action</th>
+                                                                           </tr>
+                                                                       </thead>
+                                                                       <tbody>
+                                                                         @if($CropCat->count() > 0)
+                                                                       @foreach($CropCat as $cropcategory)
+                                                                           <tr class="table-light">
+                                                                              
+                                                                                <td>{{  $cropcategory->id }}</td>
+                                                                               <td>{{  $cropcategory->crop_name }}</td>
+                                                                               <td>{{  $cropcategory->type_of_variety}}</td>
+                                                                             
+                                                                              
+                                                                               <td>
+                                                                                  
+                                                                                                                                                <!-- Example link to open edit modal -->
+                                                                                     <a href="{{route('agri_districts.agri_edit', $cropcategory->id)}}" title="Edit"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a> 
+                                                                       
+            
+                                                                                        <form  action="{{ route('agri_districts.agri_delete',  $cropcategory->id) }}"method="post" accept-charset="UTF-8" style="display:inline">
+                                                                                            {{ csrf_field()}}
+                                                                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                                                                   </form>
+                                                                                  
+                                                                               </td>
+                                                                         </tr>
+                                                                         @endforeach
+                                                                         @else
+                                                                         <tr>
+                                                                             <td class="text-center" colspan="5">AgriDistirict is empty</td>
+                                                                         </tr>
+                                                                         @endif
+                                                                     </tbody>
+                                                                 </table>
+                                                             </div>
+                                                              <!-- Pagination links -->
+                                                              <ul class="pagination">
+                                                                 <li><a href="{{ $CropCat->previousPageUrl() }}">Previous</a></li>
+                                                                 @foreach ($CropCat->getUrlRange(1,$CropCat->lastPage()) as $page => $url)
+                                                                     <li class="{{ $page == $CropCat->currentPage() ? 'active' : '' }}">
+                                                                         <a href="{{ $url }}">{{ $page }}</a>
+                                                                     </li>
+                                                                 @endforeach
+                                                                 <li><a href="{{ $CropCat->nextPageUrl() }}">Next</a></li>
+                                                             </ul>
+                                                         </div>
                         <!-- Repeat the same structure for other tabs -->
+
+
+
                     </div>
 
                 </div>

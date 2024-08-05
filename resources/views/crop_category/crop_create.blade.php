@@ -1,226 +1,448 @@
 @extends('admin.dashb')
-@section('admin')
-@extends('layouts._footer-script')
-@extends('layouts._head')
-{{-- @extends('agent.agent_Dashboard')
-@section('agent')  --}}
-{{-- @extends('agent.agent_Dashboard') --}}
 
-{{-- @section('agent') --}}
+@section('admin')
+    @extends('layouts._footer-script')
+    @extends('layouts._head')
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+        
+        :root{
+            --primary: #6b59d3;
+            --fourth:#05a34a;
+            --secondary: #bfc0c0;
+            --third:#ffffffc5;
+            --white: #fff;
+            --text-clr: #5b6475;
+            --header-clr: #25273d;
+            --next-btn-hover: #8577d2;
+            --back-btn-hover: #8b8c8c;
+        }
+        
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+            outline: none;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        body{
+            background: var(--third);
+            color: var(--text-clr);
+            font-size: 16px;
+            position: relative;
+        }
+        
+        /* .card-body{
+            width: 750px;
+            max-width: 80%;
+            background: var(--white);
+            margin: 10px auto 0;
+            padding: 50px;
+            border-radius: 5px;
+        } */
+        
+        .card-body .header{
+            margin-bottom: 35px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .card-body .header ul{
+            display: flex;
+        }
+        
+        .card-body .header ul li{
+            margin-right: 50px;
+            position: relative;
+        }
+        
+        .card-body .header ul li:last-child{
+            margin-right: 0;
+        }
+        
+        .card-body .header ul li:before{
+            content: "";
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 55px;
+            width: 100%;
+            height: 2px;
+            background: var(--secondary);
+        }
+        
+        .card-body .header ul li:last-child:before{
+            display: none;
+        }
+        
+        .card-body .header ul li div{
+            padding: 5px;
+            border-radius: 50%;
+        }
+        
+        .card-body .header ul li p{
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            color: var(--white);
+            text-align: center;
+            line-height: 50px;
+            border-radius: 50%;
+        }
+        
+        .card-body .header ul li.active:before{
+            background: var(--primary);
+        }
+        
+        .card-body .header ul li.active p{
+            background: var(--primary);
+        }
+        
+        .card-body.form_wrap{
+            margin-bottom: 35px;
+        }
+        
+        .card-body .form_wrap h2{
+            color: var(--header-clr);
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        
+        .card-body .form_wrap .input_wrap{
+            width: 350px;
+            max-width: 100%;
+            margin: 0 auto 20px;
+        }
+        
+        .card-body .form_wrap .input_wrap:last-child{
+            margin-bottom: 0;
+        }
+        
+        .card-body .form_wrap .input_wrap label{
+            display: block;
+            margin-bottom: 5px;
+        }
+        .placeholder-multiform{
+            border: 2px solid var(--secondary);
+        }
+        .card-body .form_wrap .input_wrap .form-control{
+            border: 2px solid var(--secondary);
+            border-radius: 3px;
+            padding: 10px;
+            display: block;
+            height: auto;
+            width: 100%;	
+            font-size: 16px;
+            transition: 0.5s ease;
+        }
+        
+        .card-body .form_wrap .input_wrap .form-control:focus{
+            border-color: var(--primary);
+        }
+        
+        .card-body .btns_wrap{
+            width: 350px;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .card-body .btns_wrap .common_btns{
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .card-body .btns_wrap .common_btns.form_1_btns{
+            justify-content: flex-end;
+        }
+        
+        .card-body .btns_wrap .common_btns button{
+            border: 0;
+            padding: 12px 15px;
+            background: var(--fourth);
+            color: var(--white);
+            width: 135px;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            border-radius: 3px;
+            transition: 0.5s ease;
+            cursor: pointer;
+        }
+        
+        .card-body .btns_wrap .common_btns button.btn_back{
+            background: var(--secondary);
+        }
+        
+        .card-body .btns_wrap .common_btns button.btn_next .icon{
+            display: flex;
+            margin-left: 10px;
+        }
+        
+        .card-body .btns_wrap .common_btns button.btn_back .icon{
+            display: flex;
+            margin-right: 10px;
+        }
+        
+        .card-body .btns_wrap .common_btns button.btn_next:hover,
+        .card-body .btns_wrap .common_btns button.btn_done:hover{
+            background: var (--next-btn-hover);
+        }
+        
+        .card-body .btns_wrap .common_btns button.btn_back:hover{
+            background: var (--back-btn-hover);
+        }
+        
+        .modal_wrapper{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            visibility: hidden;
+        }
+        
+        .modal_wrapper .shadow{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            opacity: 0;
+            transition: 0.2s ease;
+        }
+        
+        .modal_wrapper .success_wrap{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-800px);
+            background: var(--white);
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+            transition: 0.5s ease;
+        }
+        
+        .modal_wrapper .success_wrap .modal_icon{
+            margin-right: 20px;
+            width: 30px;
+            height: 50px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+        }/admin-view-polygon
+        
+        .modal_wrapper.active{
+            visibility: visible;
+        }
+        
+        .modal_wrapper.active .shadow{
+            opacity: 1;
+        }
+        
+        .modal_wrapper.active .success_wrap{
+            transform: translate(-50%,-50%);
+        }
+        .light-gray-placeholder::placeholder {
+        color: lightgray;
+    }
+
+
+
+    
+    </style>
 
 <div class="page-content">
 
-  <nav class="page-breadcrumb">
+    
+    <div class="card-forms border rounded">
 
-  </nav>
-  
-  {{-- <div class="progress mb-3">
-    <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 15%;" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">15% Complete</div>
+    
+        <div class="card-forms border rounded">
 
-  </div> --}}
-  <div class="row">
-    <div class="col-md-12 grid-margin">
-      <div class="card border rounded">
-        @if($errors->any())
-        <ul class="alert alert-warning">
-          @foreach ($errors->all() as $error)
-          <li>{{$error}}</li>
-          @endforeach
-        </ul>
-        @endif
-      
-          <div class="card-body">
-          
-          <h6 class="card-title"><span>I.</span>Create Crop Category</h6>
-
-          <br>
-       
-          <form action{{url('crop_categorys')}} method="post">
-            @csrf
-            <div class="row mb-3">
-              <div class="col-md-3 mb-3" >
-                <label class="form-expand" >Category Name:</label>
-                <select class="form-control placeholder-text @error('categorize_id') is-invalid @enderror" name="categorizes_id" id="selectseedVarie" onchange="checkseedVarie()" aria-label="label select e">
-                  @foreach ($Cat as $Categorize)
-                  <option value="{{ $Categorize->id }}">{{ $Categorize->cat_name }}</option>
-
-                  @endforeach
-                </select>
-               
-                @error('agri_districts_id')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-              </div>
-              <div class="col-md-3 mb-3">
-                <label class="form-expand" for="crop_name">Crop Name:</label>
-                <input type="text" class="form-control placeholder-text @error('crop_name') is-invalid @enderror" name="crop_name" id="validationCustom01" placeholder="Enter crop name" value="{{ old('crop_name') }}" >
-                @error('crop_name')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-              </div>
-              <div class="col-md-3 mb-3">
-                <label class="form-expand" for="crop_descript">Description:</label>
-                <input type="text" class="form-control placeholder-text @error('crop_descript') is-invalid @enderror" name="crop_descript" id="validationCustom01" placeholder="Enter description" value="{{ old('cat_descript') }}" >
-                @error('crop_descript')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-              </div>
-            
-
-              </div>
-
-<div  class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <button  type="submit" class="btn btn-success me-md-2">Submit</button></a></p>
-</div>
-          </form>
-        
-          
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12 grid-margin">
-      <div class="card border rounded">
-        <div class="card-body">
-          @if (session('message'))
-          <div class="alert alert-success" role="alert">
-            {{ session('message')}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-         
-          @endif
-        
-          <h4 class="mb-3 mb-md-0">Crop Category</h4>
-            <br>
-       <p class="text-success">This page provides a clear overview of the personal data we have collected about you, including categories of information, purposes of collection, data usage, sharing practices, security measures, and options for data access and control. We are committed to transparency and safeguarding your privacy rights.</p><br>
-         <div class="table-responsive tab ">
-          <table class="table table-bordered datatable">
-              <thead class="thead-light">
-                  <tr >
-                    <th>No.</th>
-                      <th>CropCatID</th>
-                      <th>CategoryID</th>
-                      <th>Crop Name</th>
-                      <th>Description</th>
-                      <th>Created At</th>
-                      <th>Updated</th>
-                      <th>Action</th>
-                  </tr>
-              </thead>
-              <tbody>
-                @if($CropCat->count() > 0)
-              @foreach($CropCat as $cropcat)
-                  <tr class="table-light">
-                       <td>{{ $loop->iteration }}</td>
-                       <td>{{  $cropcat->id }}</td>
-                      <td>{{  $cropcat->categorizes_id }}</td>
-                      <td>{{  $cropcat->crop_name}}</td>
-                      <td>{{  $cropcat->crop_descript }}</td>
-                     
-                      <td>{{ $cropcat->created_at}}</td>
-                      <td>{{ $cropcat->updated_at}}</td>
-                      <td>
-{{--                          
-                           <a href="{{route('parcels.edit',  $categorize->id)}}" title="Edit Student"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a> 
+            <div class="card-body">
               
-                           <form  action="{{ route('parcels.delete',  $categorize->id) }}"method="post" accept-charset="UTF-8" style="display:inline">
-                              {{ csrf_field()}}
-                              <button type="submit" class="btn btn-danger btn-sm" title="Delete Student" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
-                          </form> --}}
-                         
-                      </td>
-                  </tr>
-              @endforeach
-              @else
-              <tr>
-                  <td class="text-center" colspan="5">Crop Category not found</td>
-              </tr>
+            {{-- <div class="header">
+                <ul>
+                    <li class="active form_1_progessbar">
+                        <div>
+                            <p>A</p>
+                        </div>
+                    </li>
+                    <li class="form_2_progessbar">
+                        <div>
+                            <p>B</p>
+                        </div>
+                    </li>
+                    <li class="form_3_progessbar">
+                        <div>
+                            <p>C</p>
+                        </div>
+                    </li>
+                </ul>
+            </div> --}}
+            <div class="content">
+              @if (session()->has('message'))
+              <div class="alert alert-success" id="success-alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      
+            {{session()->get('message')}}
+          </div>
           @endif
-              </tbody>
-          </table>
-      </div>
+          @if(session('error'))
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ session('error') }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+      @endif
+            <form id="multi-step-form" action{{url('store')}} method="post">
+                @csrf
+                <div >
 
- 
-        </div>
-              <!-- Pagination links -->
-    <div class="row"style="align-content: center;display: flex;
-    align-items: center; align-self: center">
-        <div class="col-md-7" style="align-content: center;display: flex;
-        align-items: center;">
-            {{ $CropCat->links() }}
-        </div>
-    </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-</div>
-
-</div>
-</div>
- 
-  <!--end for Production Cost-->
-  {{-- <div class="row">
-    <div class="col-md-6 grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-            <h6 class="card-title">Import File</h6>
-            <p class="text-muted mb-3">Import excel file, csv file or Msacces file only.</p>
-            <div class="form-errors"></div>
-            <form id="upload-form" method="post" enctype="multipart/form-data" onsubmit="saveForm(event)">
-              @csrf
-       
-                <div class="form-group mb-3">
-                  <label for=inputemail>Upload</label>
-                  <input type="file" class ="form-control" id="myDropify" name="upload_file" aria-describedby="emailHelp">
-                  <span class="text-danger input_image_err formErrors"></span>
+                    <input type="hidden" name="users_id" value="{{ $userId}}">
+                   
+                 
+             </div>
+             <div class="input-box">
+               
+                <input type="hidden" class="form-control light-gray-placeholder @error('first_name') is-invalid @enderror" name="country" id="validationCustom01" value="corn" readonly >
+                @error('first_name')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
               </div>
-            <div class="form-group mb-2 text-center">
-              <button type="submit" class="btn btn-primary me-2">Submit</button>
-            </div>
-             
-            </form>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-            integrity="sha384-oBqDVmz9ATKxIep9tiCx5/Z9fNEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
-            </script>
-            <script sr="https://cdn. jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
-            integrity="sha384-7VPbUDkoPSGFnVtY10QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
-            </script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-             <script>
-              function saveForm(e){
-                e.preventDefault();
-                console.log($('#upload-form'));
-                var uploadForm= $('upload-for,')(0);
-                Var uploadFormData= new FormData(uploadForm);
-
-                $.ajax({
-                  method="Post",
-                  url:"{{url('saveUploadForm')}}",
-                  data:uploadFormData,
-                  processData:false,
-                  contentType:false,
-                  success:function(response){
-                    console.log(response);
-                    $(#form-errors).html('');
-                  },
-                  error:function(response){
-
-                  }
-                })
-              }
-             </script> --}}
-           
-       
-        </div>
-      </div>
-    </div>
-  
-  </div>
-
-</div>@endsection
+         
+                <!-- Step 1 -->
+                <div id="step-1" class="form_1">
+                    {{-- <h4 class="card-titles" style="display: flex;text-align: center; "><span></span>Rice Survey Form Zamboanga City</h4> --}}
     
 
+         
+                    <h3>Crops</h3><br>
+                    <p class="text-success">Provide clear and concise responses to each section, ensuring accuracy and relevance. If certain information is not applicable, write N/A.</p><br>
+        
+                    <div class="user-details">
+                        
+                        {{-- <div class="input-box">
+                            <span class="details">AgriDistrict</span>
+                            <select class="form-control light-gray-placeholder" name="agri_district" id="agri_districts_id">
+                           
+                                @foreach ($agriDistrict as $agri)
+                                    <option value="{{ $agri->district  }}">{{ $agri->district }}</option>
+                                @endforeach
+                            </select>
+                        </div> --}}
+                        
+                      
+                        <div class="input-box">
+                          <span class="details">Crop Name</span>
+                          <select class="form-control light-gray-placeholder" name="crop_name" id="selectcrop" onchange="checkcropname()" aria-label="Floating label select e">
+                              <option selected disabled>Select</option>
+                              <option value="Rice" {{ old('crop_name') == 'Rice' ? 'selected' : '' }}>Rice</option>
+                              <option value="Corn" {{ old('crop_name') == 'Corn' ? 'selected' : '' }}>Corn</option>
+                              <option value="Coconut" {{ old('crop_name') == 'Coconut' ? 'selected' : '' }}>Coconut</option>
+                              <option value="Add" {{ old('crop_name') == 'Add' ? 'selected' : '' }}>Add</option>
+                          </select>
+                      </div>
+                      
+                      <div class="input-box" id="addCropInput" style="display: none;">
+                          <span class="details">Add Crop</span>
+                          <input type="text" class="form-control light-gray-placeholder @error('barangay_name') is-invalid @enderror" name="new_crop_name" id="newCropName">
+                          {{-- <button type="button" class="btn btn-primary" onclick="addNewCrop()">Add Crop</button> --}}
+                          @error('barangay_name')
+                          <div class="invalid-feedback">{{ $message }}</div>
+                          @enderror
+                      </div>
+                      
+                       
+                        <div class="input-box">
+                          <span class="details">Crop Variety</span>
+                          <input type="text" class="form-control light-gray-placeholder @error('type_of_variety') is-invalid @enderror"  name="type_of_variety"placeholder="Enter crop variety" value="{{ old('type_of_variety') }}" >
+                          @error('type_of_variety')
+                          <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
+                        </div>
+                     
+                        
+                      </div>
+                      <div class="form_1_btns">
+                       
+                        <a  href="{{route('polygon.polygons_show')}}"button  class="btn btn-success me-md-2">Back</button></a>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                </div>
+
+            
+                          
+                            
+                          </div>
+                     
+            
+                          <div class="form_3_btns" style="display: none;">
+
+                            <button type="button" class="btn btn-secondary btn_back mr-2">Back</button>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </div>
+            </form>
+                </div>
+            </div>
+            {{-- <div class="btns_wrap">
+                <div class="common_btns form_1_btns">
+                    <button type="button" class="btn_next">Next <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_2_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Back</button>
+                    <button type="button" class="btn_next">Next <span class="icon"><ion-icon name="arrow-forward-sharp"></ion-icon></span></button>
+                </div>
+                <div class="common_btns form_3_btns" style="display: none;">
+                    <button type="button" class="btn_back"><span class="icon"><ion-icon name="arrow-back-sharp"></ion-icon></span>Back</button>
+                    <button type="submit" class="btn btn-success me-md-2 btn-submit">Done</button>
+                </div>
+            </div> --}}
+        </div>
+    </div>
+   <script>
+    function checkcropname() {
+    var selectcrop = document.getElementById("selectcrop");
+    var addCropInput = document.getElementById("addCropInput");
+
+    if (selectcrop.value === "Add") {
+        addCropInput.style.display = "block";
+    } else {
+        addCropInput.style.display = "none";
+    }
+}
+
+function addNewCrop() {
+    var newCropName = document.getElementById("newCropName").value;
+    var selectcrop = document.getElementById("selectcrop");
+
+    // Create a new option element
+    var newOption = document.createElement("option");
+    newOption.value = newCropName;
+    newOption.text = newCropName;
+
+    // Add the new option to the select element
+    selectcrop.add(newOption);
+
+    // Select the new option
+    selectcrop.value = newCropName;
+
+    // Hide the input box
+    document.getElementById("addCropInput").style.display = "none";
+}
+
+   </script>
+@endsection

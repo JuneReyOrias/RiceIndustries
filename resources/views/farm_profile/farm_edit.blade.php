@@ -15,139 +15,170 @@
             <div class="card-body">
               
               <div class="content">
-                <form id="multiStepForm" action{{url('PersonalInfoUpdate')}}   method="post">
+                <form id="multiStepForm" action{{url('UpdateFarmProfiles')}}   method="post">
                     @csrf
         
 
                     <!-- Step 2: Farm Profile -->
                     <div class="step active" id="step2">
-                        <h2>Step 2: Farm Profile</h2>
+                        <h2>Update Farm Profile</h2>
                         <div id="farmProfiles">
                             <!-- Sample Farm Profile -->
                             <div class="user-details">
+                                <!-- Hidden fields for user and district IDs -->
+                                <div class="input-box" style="display: none;">
+                                    <input type="hidden" class="form-control light-gray-placeholder gray-text"
+                                        name="users_id" value="{{ $userId }}" placeholder="First name" value="{{ old('users_id') }}">
+                                </div>
+                                <div class="input-box" style="display: none;">
+                                    <input type="hidden" name="agri_districts_id" value="{{$agri_districts}}">
+                                </div>
+                                <div class="input-box" style="display: none;">
+                                    <input type="hidden" name="personal_informations_id" value="{{$farmprofiles->personal_informations_id}}">
+                                </div>
+                                <!-- Tenurial Status -->
                                 <div class="input-box">
                                     <label for="tenurial_status_0">Tenurial Status:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][tenurial_status]" id="tenurial_status_0" required>
+                                    <select class="form-control placeholder-text @error('tenurial_status') is-invalid @enderror" name="tenurial_status" id="tenurial_status_0" onchange="checkTenurial()" aria-label="label select e">
+                                        <option value="{{$farmprofiles->tenurial_status}}">{{$farmprofiles->tenurial_status}}</option>
+                                        <option value="Owner" {{ old('tenurial_status') == 'Owner' ? 'selected' : '' }}>Owner</option>
+                                        <option value="Owner Tiller" {{ old('tenurial_status') == 'Owner Tiller' ? 'selected' : '' }}>Owner Tiller</option>
+                                        <option value="Tenant" {{ old('tenurial_status') == 'Tenant' ? 'selected' : '' }}>Tenant</option>
+                                        <option value="Tiller" {{ old('tenurial_status') == 'Tiller' ? 'selected' : '' }}>Tiller</option>
+                                        <option value="Lease" {{ old('tenurial_status') == 'Lease' ? 'selected' : '' }}>Lease</option>
+                                        <option value="Add" {{ old('tenurial_status') == 'Add' ? 'selected' : '' }}>Add</option>
+                                    </select>
                                 </div>
+                    
+                                <!-- Other fields -->
                                 <div class="input-box">
-                                    <label for="rice_farm_address_0">- Address:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][rice_farm_address]" id="rice_farm_address_0" required>
+                                    <label for="rice_farm_address_0">Farm Address:</label>
+                                    <input type="text" class="form-control"name="farm_address" value="{{$farmprofiles->farm_address}}" name="farm_profiles[0][farm_address]" placeholder="Enter Farm address" id="rice_farm_address_0">
                                 </div>
                                 <div class="input-box">
                                     <label for="no_of_years_as_farmers_0">Number of Years as Farmer:</label>
-                                    <input type="number" class="form-control" name="farm_profiles[0][no_of_years_as_farmers]" id="no_of_years_as_farmers_0" required>
+                                    <input type="number" class="form-control"name="no_of_years_as_farmers" value="{{$farmprofiles->no_of_years_as_farmers}}" name="farm_profiles[0][no_of_years_as_farmers]" id="no_of_years_as_farmers_0" placeholder="Enter no of years as farmer">
                                 </div>
                                 <div class="input-box">
                                     <label for="gps_longitude_0">GPS Longitude:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][gps_longitude]" id="gps_longitude_0" required>
+                                    <input type="text" class="form-control" value="{{$farmprofiles->gps_longitude}}"name="gps_longitude" name="farm_profiles[0][gps_longitude]" placeholder="Enter longitude" id="gps_longitude_0">
                                 </div>
                                 <div class="input-box">
                                     <label for="gps_latitude_0">GPS Latitude:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][gps_latitude]" id="gps_latitude_0" required>
+                                    <input type="text" class="form-control" value="{{$farmprofiles->gps_latitude}}"name="gps_latitude" name="farm_profiles[0][gps_latitude]" placeholder="Enter latitude" id="gps_latitude_0">
                                 </div>
                                 <div class="input-box">
                                     <label for="total_physical_area_has_0">Total Physical Area (has):</label>
-                                    <input type="number" class="form-control" name="farm_profiles[0][total_physical_area_has]" id="total_physical_area_has_0" required>
+                                    <input type="number" class="form-control" placeholder="Enter Total Physical Area" value="{{$farmprofiles->total_physical_area}}"name="total_physical_area" name="farm_profiles[0][total_physical_area]" id="total_physical_area_has_0">
                                 </div>
                                 <div class="input-box">
-                                    <label for="rice_area_cultivated_has_0">Rice Area Cultivated (has):</label>
-                                    <input type="number" class="form-control" name="farm_profiles[0][rice_area_cultivated_has]" id="rice_area_cultivated_has_0" required>
+                                    <label for="area_cultivated_has_0">Total Area Cultivated (has):</label>
+                                    <input type="number" class="form-control" placeholder="Enter Total Area Cultivated" value="{{$farmprofiles->total_area_cultivated}}"name="total_area_cultivated" name="farm_profiles[0][total_area_cultivated]" id="rice_area_cultivated_0">
                                 </div>
                                 <div class="input-box">
                                     <label for="land_title_no_0">Land Title No:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][land_title_no]" id="land_title_no_0" required>
+                                    <input type="text" class="form-control" placeholder="Enter Land title no" value="{{$farmprofiles->land_title_no}}"name="land_title_no" name="farm_profiles[0][land_title_no]" id="land_title_no_0">
                                 </div>
                                 <div class="input-box">
                                     <label for="lot_no_0">Lot No:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][lot_no]" id="lot_no_0" required>
+                                    <input type="text" class="form-control" placeholder="Enter Lot no" value="{{$farmprofiles->lot_no}}"name="lot_no" name="farm_profiles[0][lot_no]" id="lot_no_0">
                                 </div>
                                 <div class="input-box">
                                     <label for="area_prone_to_0">Area Prone To:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][area_prone_to]" id="area_prone_to_0" required>
+                                    <select class="form-control placeholder-text @error('area_prone_to') is-invalid @enderror"name="area_prone_to" name="farm_profiles[0][area_prone_to]" id="area_prone_to_0" onchange="checkProne()" aria-label="Floating label select e">
+                                        <option value="{{$farmprofiles->area_prone_to}}">{{$farmprofiles->area_prone_to}}</option>
+                                        <option value="Flood" {{ old('area_prone_to') == 'Flood' ? 'selected' : '' }}>Flood</option>
+                                        <option value="Drought" {{ old('area_prone_to') == 'Drought' ? 'selected' : '' }}>Drought</option>
+                                        <option value="Saline" {{ old('area_prone_to') == 'Saline' ? 'selected' : '' }}>Saline</option>
+                                        <option value="N/A" {{ old('area_prone_to') == 'N/A' ? 'selected' : '' }}>N/A</option>
+                                        <option value="Add Prone" {{ old('area_prone_to') == 'Add Prone' ? 'selected' : '' }}>Add</option>
+                                    </select>
                                 </div>
+                                <div class="input-box" id="AreaProneInput" style="display: none;">
+                                    <label for="add_newProneYear">Add New Area Prone To:</label>
+                                    <input type="text" class="form-control" id="AreaProneInputField"name="add_newProneYear" name="farm_profiles[0][add_newProneYear]" placeholder="Enter area prone to" value="{{ old('add_newProneYear') }}">
+                                </div>
+                    
                                 <div class="input-box">
                                     <label for="ecosystem_0">Ecosystem:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][ecosystem]" id="ecosystem_0" required>
+                                    <select class="form-control placeholder-text @error('ecosystem') is-invalid @enderror"name="ecosystem" name="farm_profiles[0][ecosystem]" id="ecosystem_0" onchange="CheckEcosystem()" aria-label="Floating label select e">
+                                        <option value="{{$farmprofiles->ecosystem}}">{{$farmprofiles->ecosystem}}</option>
+                                        <option value="Lowland Rain Fed" {{ old('ecosystem') == 'Lowland Rain Fed' ? 'selected' : '' }}>Lowland Rain Fed</option>
+                                        <option value="Lowland Irrigated" {{ old('ecosystem') == 'Lowland Irrigated' ? 'selected' : '' }}>Lowland Irrigated</option>
+                                        <option value="Add ecosystem" {{ old('ecosystem') == 'Add ecosystem' ? 'selected' : '' }}>Add</option>
+                                    </select>
                                 </div>
+                                <div class="input-box" id="EcosystemInput" style="display: none;">
+                                    <label for="Add_Ecosystem">Add New Ecosystem:</label>
+                                    <input type="text" class="form-control" id="EcosystemInputField"name="Add_Ecosystem" name="farm_profiles[0][Add_Ecosystem]" placeholder="Enter new ecosystem" value="{{ old('Add_Ecosystem') }}">
+                                </div>
+                    
                                 <div class="input-box">
-                                    <label for="rsba_register_0">RSBA Register:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][rsba_register]" id="rsba_register_0" required>
+                                    <label for="rsba_registered_0">RSBA Register:</label>
+                                    <select class="form-control placeholder-text @error('rsba_registered') is-invalid @enderror"name="rsba_registered" name="farm_profiles[0][rsba_registered]" id="rsba_registered_0" aria-label="Floating label select e">
+                                        <option value="{{$farmprofiles->rsba_registered}}">{{$farmprofiles->rsba_registered}}</option>
+                                        <option value="Yes" {{ old('rsba_registered') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                        <option value="No" {{ old('rsba_registered') == 'No' ? 'selected' : '' }}>No</option>
+                                    </select>
                                 </div>
                                 <div class="input-box">
                                     <label for="pcic_insured_0">PCIC Insured:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][pcic_insured]" id="pcic_insured_0" required>
+                                    <select class="form-control placeholder-text @error('pcic_insured') is-invalid @enderror"name="pcic_insured" name="farm_profiles[0][pcic_insured]" id="pcic_insured_0" aria-label="Floating label select e">
+                                        <option value="{{$farmprofiles->pcic_insured}}">{{$farmprofiles->pcic_insured}}</option>
+                                        <option value="Yes" {{ old('pcic_insured') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                        <option value="No" {{ old('pcic_insured') == 'No' ? 'selected' : '' }}>No</option>
+                                    </select>
                                 </div>
                                 <div class="input-box">
                                     <label for="government_assisted_0">Government Assisted:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][government_assisted]" id="government_assisted_0" required>
+                                    <select class="form-control placeholder-text @error('government_assisted') is-invalid @enderror"nmae="government_assisted" name="farm_profiles[0][government_assisted]" id="government_assisted_0" aria-label="Floating label select e">
+                                        <option value="{{$farmprofiles->government_assisted}}">{{$farmprofiles->government_assisted}}</option>
+                                        <option value="Yes" {{ old('government_assisted') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                                        <option value="No" {{ old('government_assisted') == 'No' ? 'selected' : '' }}>No</option>
+                                    </select>
                                 </div>
                                 <div class="input-box">
                                     <label for="source_of_capital_0">Source of Capital:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][source_of_capital]" id="source_of_capital_0" required>
+                                    <select class="form-control placeholder-text @error('source_of_capital') is-invalid @enderror"name="source_of_capital" name="farm_profiles[0][source_of_capital]" id="source_of_capital_0" onchange="checkCapital()" aria-label="Floating label select e">
+                                        <option value="{{$farmprofiles->source_of_capital}}">{{$farmprofiles->source_of_capital}}</option>
+                                        <option value="Government Subsidy" {{ old('source_of_capital') == 'Government Subsidy' ? 'selected' : '' }}>Government Subsidy</option>
+                                        <option value="Traders" {{ old('source_of_capital') == 'Traders' ? 'selected' : '' }}>Traders</option>
+                                        <option value="Own" {{ old('source_of_capital') == 'Own' ? 'selected' : '' }}>Own</option>
+                                        <option value="Add" {{ old('source_of_capital') == 'Add' ? 'selected' : '' }}>Add</option>
+                                    </select>
+                                </div>
+                                <div class="input-box" id="capitalInput" style="display: none;">
+                                    <label for="add_source_of_capital">Add Source of Capital:</label>
+                                    <input type="text" class="form-control" id="capitalInputField" name="add_source_of_capital" placeholder="Enter Source of Capital" value="{{ old('add_source_of_capital') }}">
                                 </div>
                                 <div class="input-box">
                                     <label for="remarks_recommendation_0">Remarks/Recommendation:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][remarks_recommendation]" id="remarks_recommendation_0" required>
+                                    <input type="text" class="form-control" value="{{$farmprofiles->remarks_recommendation}}"name="remarks_recommendation" name="farm_profiles[0][remarks_recommendation]" id="remarks_recommendation_0" placeholder="Enter remarks/recommendation">
                                 </div>
                                 <div class="input-box">
                                     <label for="oca_district_office_0">OCA District Office:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][oca_district_office]" id="oca_district_office_0" required>
+                                    <input type="text" class="form-control" value="{{$farmprofiles->oca_district_office}}"name="oca_district_office" name="farm_profiles[0][oca_district_office]" id="oca_district_office_0" placeholder="Enter OCA District Office">
                                 </div>
                                 <div class="input-box">
                                     <label for="name_technicians_0">Name of Technicians:</label>
-                                    <input type="text" class="form-control" name="farm_profiles[0][name_technicians]" id="name_technicians_0" required>
+                                    <input type="text" class="form-control" value="{{$farmprofiles->name_of_field_officer_technician}}"name="name_of_field_officer_technician" name="farm_profiles[0][name_of_field_officer_technician]" id="name_technicians_0" placeholder="Enter name of technician">
                                 </div>
                                 <div class="input-box">
-                                    <label for="date_interview_0">Date of Interview:</label>
-                                    <input type="date" class="form-control" name="farm_profiles[0][date_interview]" id="date_interview_0" required>
+                                    <label for="datepicker_0">Date of Interview:</label>
+                                    <input type="text" class="form-control datepicker" name="date_interviewed" value="{{$farmprofiles->date_interviewed}}" placeholder="Enter Date of Interview" id="datepicker" data-input="true">
                                 </div>
-                    
-                                <div id="cropFarms_0">
-                                    <div class="user-details">
-                                        <div class="input-box">
-                                            <label for="crop_type_0_0">Crop Type:</label>
-                                            <input type="text" class="form-control" name="farm_profiles[0][crop_farms][0][crop_type]" id="crop_type_0_0" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <label for="crop_area_0_0">Crop Area:</label>
-                                            <input type="number" class="form-control" name="farm_profiles[0][crop_farms][0][crop_area]" id="crop_area_0_0" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <label for="type_rice_variety_0_0">Rice Variety Type:</label>
-                                            <input type="text" class="form-control" name="farm_profiles[0][crop_farms][0][type_rice_variety]" id="type_rice_variety_0_0" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <label for="prefered_variety_0_0">Preferred Variety:</label>
-                                            <input type="text" class="form-control" name="farm_profiles[0][crop_farms][0][prefered_variety]" id="prefered_variety_0_0" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <label for="plant_schedule_wetseason_0_0">Plant Schedule (Wet Season):</label>
-                                            <input type="text" class="form-control" name="farm_profiles[0][crop_farms][0][plant_schedule_wetseason]" id="plant_schedule_wetseason_0_0" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <label for="plant_schedule_dryseason_0_0">Plant Schedule (Dry Season):</label>
-                                            <input type="text" class="form-control" name="farm_profiles[0][crop_farms][0][plant_schedule_dryseason]" id="plant_schedule_dryseason_0_0" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <label for="no_of_cropping_yr_0_0">Number of Cropping Years:</label>
-                                            <input type="number" class="form-control" name="farm_profiles[0][crop_farms][0][no_of_cropping_yr]" id="no_of_cropping_yr_0_0" required>
-                                        </div>
-                                        <div class="input-box">
-                                            <label for="yield_kg_ha_0_0">Yield (kg/ha):</label>
-                                            <input type="number" class="form-control" name="farm_profiles[0][crop_farms][0][yield_kg_ha]" id="yield_kg_ha_0_0" required>
-                                        </div>
-                                        <!-- Add other fields as needed -->
-                                        <button type="button" class="btn btn-danger" onclick="removeCropFarm(0, 0)">Remove Crop Farm</button>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-secondary" onclick="addCropFarm(0)">Add Another Crop Farm</button>
-                                <button type="button" class="btn btn-danger mt-2" onclick="removeFarmProfile(0)">Remove Farm Profile</button>
+
+                                {{-- <div class="input-box">
+                                    <button type="button" class="btn btn-danger mt-2" onclick="removeFarmProfile(this)">Remove</button>
+                                </div> --}}
                             </div>
                         </div>
-                        <button type="button" class="btn btn-secondary mt-2" onclick="addFarmProfile()">Add Another Farm Profile</button>
-                        <button type="button" class="btn btn-primary mt-2" onclick="previousStep()">Previous</button>
-                        <button type="button" class="btn btn-primary mt-2" onclick="nextStep()">Next</button>
-                    </div>
+                        {{-- <button type="button" class="btn btn-primary mt-2" onclick="addFarmProfile()">Add Farm Profile</button> --}}
+                        <button type="button" class="btn btn-secondary mt-2" onclick="history.back()">Back</button>
+                        <button type="submit" class="btn btn-success mt-2">Save Changes</button>
+                    </div> 
+                    
+                    
                     
                     <!-- Step 3: Additional Steps -->
                     <div class="step" id="step3">
@@ -1385,128 +1416,131 @@ document.getElementById("SelectOrganization").addEventListener("change", handleO
         return isValid;
     }
 
-    function addFarmProfile() {
-        const farmProfiles = document.getElementById('farmProfiles');
-        const index = farmProfiles.children.length;
+    document.addEventListener('DOMContentLoaded', function () {
+    // Initialize datepickers or other JS functionality if needed
+});
 
-        const farmProfile = document.createElement('div');
-        farmProfile.className = 'user-details';
+function addFarmProfile() {
+    const farmProfiles = document.getElementById('farmProfiles');
+    const index = farmProfiles.children.length;
 
-        // Column layout for farm profile
-        const farmProfileCol = document.createElement('div');
-        farmProfileCol.className = 'input-box';
+    const farmProfile = document.createElement('div');
+    farmProfile.className = 'user-details';
 
-        const farmProfileContainer = document.createElement('div');
-        farmProfileContainer.className = 'user-details';
+    const fields = [
+        { label: 'Tenurial Status:', type: 'select', name: `farm_profiles[${index}][tenurial_status]`, id: `tenurial_status_${index}`, options: ['Owner', 'Owner Tiller', 'Tenant', 'Tiller', 'Lease', 'Add'] },
+        { label: 'Farm Address:', type: 'text', name: `farm_profiles[${index}][farm_address]`, id: `rice_farm_address_${index}` },
+        { label: 'Number of Years as Farmer:', type: 'number', name: `farm_profiles[${index}][no_of_years_as_farmers]`, id: `no_of_years_as_farmers_${index}` },
+        { label: 'GPS Longitude:', type: 'text', name: `farm_profiles[${index}][gps_longitude]`, id: `gps_longitude_${index}` },
+        { label: 'GPS Latitude:', type: 'text', name: `farm_profiles[${index}][gps_latitude]`, id: `gps_latitude_${index}` },
+        { label: 'Total Physical Area (has):', type: 'number', name: `farm_profiles[${index}][total_physical_area_has]`, id: `total_physical_area_has_${index}` },
+        { label: 'Total Area Cultivated (has):', type: 'number', name: `farm_profiles[${index}][rice_area_cultivated_has]`, id: `rice_area_cultivated_${index}` },
+        { label: 'Land Title No:', type: 'text', name: `farm_profiles[${index}][land_title_no]`, id: `land_title_no_${index}` },
+        { label: 'Lot No:', type: 'text', name: `farm_profiles[${index}][lot_no]`, id: `lot_no_${index}` },
+        { label: 'Area Prone To:', type: 'select', name: `farm_profiles[${index}][area_prone_to]`, id: `area_prone_to_${index}`, options: ['Flood', 'Drought', 'Saline', 'N/A', 'Add Prone'] },
+        { label: 'Ecosystem:', type: 'select', name: `farm_profiles[${index}][ecosystem]`, id: `ecosystem_${index}`, options: ['Lowland Rain Fed', 'Lowland Irrigated', 'Add Ecosystem'] },
+        { label: 'RSBA Register:', type: 'select', name: `farm_profiles[${index}][rsba_registered]`, id: `rsba_registered_${index}`, options: ['Yes', 'No'] },
+        { label: 'PCIC Insured:', type: 'select', name: `farm_profiles[${index}][pcic_insured]`, id: `pcic_insured_${index}`, options: ['Yes', 'No'] },
+        { label: 'Government Assisted:', type: 'select', name: `farm_profiles[${index}][government_assisted]`, id: `government_assisted_${index}`, options: ['Yes', 'No'] },
+        { label: 'Source of Capital:', type: 'select', name: `farm_profiles[${index}][source_of_capital]`, id: `source_of_capital_${index}`, options: ['Government Subsidy', 'Traders', 'Own', 'Add Source'] },
+        { label: 'Remarks/Recommendation:', type: 'text', name: `farm_profiles[${index}][remarks_recommendation]`, id: `remarks_recommendation_${index}` },
+        { label: 'OCA District Office:', type: 'text', name: `farm_profiles[${index}][oca_district_office]`, id: `oca_district_office_${index}` },
+        { label: 'Name of Technicians:', type: 'text', name: `farm_profiles[${index}][name_of_field_officer_technician]`, id: `name_of_field_officer_technician_${index}` },
+        { label: 'Date of Interview:', type: 'text', name: `farm_profiles[${index}][date_interviewed]`, id: `datepicker_${index}`, data_input: 'true' }
+    ];
 
-        addInputField(farmProfileContainer, 'Farm Size:', 'number', `farm_profiles[${index}][farm_size]`, `farm_size_${index}`);
-        addInputField(farmProfileContainer, 'Farm Location:', 'text', `farm_profiles[${index}][farm_location]`, `farm_location_${index}`);
-        addInputField(farmProfileContainer, 'Rice Farm Address:', 'text', `farm_profiles[${index}][rice_farm_address]`, `rice_farm_address_${index}`);
-        addInputField(farmProfileContainer, 'Number of Years as Farmer:', 'number', `farm_profiles[${index}][no_of_years_as_farmers]`, `no_of_years_as_farmers_${index}`);
-        addInputField(farmProfileContainer, 'GPS Longitude:', 'text', `farm_profiles[${index}][gps_longitude]`, `gps_longitude_${index}`);
-        addInputField(farmProfileContainer, 'GPS Latitude:', 'text', `farm_profiles[${index}][gps_latitude]`, `gps_latitude_${index}`);
-        addInputField(farmProfileContainer, 'Total Physical Area (has):', 'number', `farm_profiles[${index}][total_physical_area_has]`, `total_physical_area_has_${index}`);
-        addInputField(farmProfileContainer, 'Rice Area Cultivated (has):', 'number', `farm_profiles[${index}][rice_area_cultivated_has]`, `rice_area_cultivated_has_${index}`);
-        addInputField(farmProfileContainer, 'Land Title No:', 'text', `farm_profiles[${index}][land_title_no]`, `land_title_no_${index}`);
-        addInputField(farmProfileContainer, 'Lot No:', 'text', `farm_profiles[${index}][lot_no]`, `lot_no_${index}`);
-        addInputField(farmProfileContainer, 'Area Prone To:', 'text', `farm_profiles[${index}][area_prone_to]`, `area_prone_to_${index}`);
-        addInputField(farmProfileContainer, 'Ecosystem:', 'text', `farm_profiles[${index}][ecosystem]`, `ecosystem_${index}`);
-        addInputField(farmProfileContainer, 'RSBA Register:', 'text', `farm_profiles[${index}][rsba_register]`, `rsba_register_${index}`);
-        addInputField(farmProfileContainer, 'PCIC Insured:', 'text', `farm_profiles[${index}][pcic_insured]`, `pcic_insured_${index}`);
-        addInputField(farmProfileContainer, 'Government Assisted:', 'text', `farm_profiles[${index}][government_assisted]`, `government_assisted_${index}`);
-        addInputField(farmProfileContainer, 'Source of Capital:', 'text', `farm_profiles[${index}][source_of_capital]`, `source_of_capital_${index}`);
-        addInputField(farmProfileContainer, 'Remarks/Recommendation:', 'text', `farm_profiles[${index}][remarks_recommendation]`, `remarks_recommendation_${index}`);
-        addInputField(farmProfileContainer, 'OCA District Office:', 'text', `farm_profiles[${index}][oca_district_office]`, `oca_district_office_${index}`);
-        addInputField(farmProfileContainer, 'Name of Technicians:', 'text', `farm_profiles[${index}][name_technicians]`, `name_technicians_${index}`);
-        addInputField(farmProfileContainer, 'Date of Interview:', 'date', `farm_profiles[${index}][date_interview]`, `date_interview_${index}`);
-
-        // Crop Farms Section
-        const cropFarms = document.createElement('div');
-        cropFarms.setAttribute('id', `cropFarms_${index}`);
-        cropFarms.className = 'user-details';
-
-        // Initial Crop Farm
-        addCropFarmFields(cropFarms, index, 0);
-
-        const addCropFarmButton = document.createElement('button');
-        addCropFarmButton.setAttribute('type', 'button');
-        addCropFarmButton.setAttribute('class', 'btn btn-secondary mt-2');
-        addCropFarmButton.textContent = 'Add Another Crop Farm';
-        addCropFarmButton.addEventListener('click', () => addCropFarm(index));
-        cropFarms.appendChild(addCropFarmButton);
-
-        const removeFarmProfileButton = document.createElement('button');
-        removeFarmProfileButton.setAttribute('type', 'button');
-        removeFarmProfileButton.setAttribute('class', 'btn btn-danger mt-2');
-        removeFarmProfileButton.textContent = 'Remove Farm Profile';
-        removeFarmProfileButton.addEventListener('click', () => removeFarmProfile(index));
-        farmProfileCol.appendChild(removeFarmProfileButton);
-
-        farmProfileCol.appendChild(farmProfileContainer);
-        farmProfileCol.appendChild(cropFarms);
-        farmProfiles.appendChild(farmProfileCol);
-    }
-
-    function addInputField(parent, labelText, type, name, id) {
-        const col = document.createElement('div');
-        col.className = 'input-box';
+    fields.forEach(field => {
+        const inputBox = document.createElement('div');
+        inputBox.className = 'input-box';
 
         const label = document.createElement('label');
-        label.setAttribute('for', id);
-        label.textContent = labelText;
-        col.appendChild(label);
+        label.setAttribute('for', field.id);
+        label.innerText = field.label;
+        inputBox.appendChild(label);
 
-        const input = document.createElement('input');
-        input.setAttribute('type', type);
-        input.setAttribute('class', 'form-control');
-        input.setAttribute('name', name);
-        input.setAttribute('id', id);
-        input.required = true;
-        col.appendChild(input);
+        if (field.type === 'select') {
+            const select = document.createElement('select');
+            select.className = 'form-control placeholder-text';
+            select.name = field.name;
+            select.id = field.id;
 
-        parent.appendChild(col);
-    }
+            field.options.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option;
+                opt.innerText = option;
+                select.appendChild(opt);
+            });
 
-    function addCropFarm(farmProfileIndex) {
-        const cropFarms = document.getElementById(`cropFarms_${farmProfileIndex}`);
-        const index = cropFarms.children.length;
-        const cropFarm = document.createElement('div');
-        cropFarm.className = 'user-details';
+            inputBox.appendChild(select);
+        } else {
+            const input = document.createElement('input');
+            input.className = 'form-control';
+            input.type = field.type;
+            input.name = field.name;
+            input.id = field.id;
+            input.placeholder = field.label;
 
-        addCropFarmFields(cropFarm, farmProfileIndex, index);
+            if (field.data_input) {
+                input.setAttribute('data-input', field.data_input);
+            }
 
-        const removeCropFarmButton = document.createElement('button');
-        removeCropFarmButton.setAttribute('type', 'button');
-        removeCropFarmButton.setAttribute('class', 'btn btn-danger mt-2');
-        removeCropFarmButton.textContent = 'Remove Crop Farm';
-        removeCropFarmButton.addEventListener('click', () => removeCropFarm(farmProfileIndex, index));
-        cropFarm.appendChild(removeCropFarmButton);
+            inputBox.appendChild(input);
+        }
 
-        cropFarms.appendChild(cropFarm);
-    }
+        farmProfile.appendChild(inputBox);
+    });
 
-    function addCropFarmFields(parent, farmProfileIndex, index) {
-        addInputField(parent, 'Crop Type:', 'text', `farm_profiles[${farmProfileIndex}][crop_farms][${index}][crop_type]`, `crop_type_${farmProfileIndex}_${index}`);
-        addInputField(parent, 'Crop Area:', 'number', `farm_profiles[${farmProfileIndex}][crop_farms][${index}][crop_area]`, `crop_area_${farmProfileIndex}_${index}`);
-        addInputField(parent, 'Type Rice Variety:', 'text', `farm_profiles[${farmProfileIndex}][crop_farms][${index}][type_rice_variety]`, `type_rice_variety_${farmProfileIndex}_${index}`);
-        addInputField(parent, 'Preferred Variety:', 'text', `farm_profiles[${farmProfileIndex}][crop_farms][${index}][prefered_variety]`, `prefered_variety_${farmProfileIndex}_${index}`);
-        addInputField(parent, 'Plant Schedule (Wet Season):', 'text', `farm_profiles[${farmProfileIndex}][crop_farms][${index}][plant_schedule_wetseason]`, `plant_schedule_wetseason_${farmProfileIndex}_${index}`);
-        addInputField(parent, 'Plant Schedule (Dry Season):', 'text', `farm_profiles[${farmProfileIndex}][crop_farms][${index}][plant_schedule_dryseason]`, `plant_schedule_dryseason_${farmProfileIndex}_${index}`);
-        addInputField(parent, 'Number of Cropping Years:', 'number', `farm_profiles[${farmProfileIndex}][crop_farms][${index}][no_of_cropping_yr]`, `no_of_cropping_yr_${farmProfileIndex}_${index}`);
-        addInputField(parent, 'Yield (kg/ha):', 'number', `farm_profiles[${farmProfileIndex}][crop_farms][${index}][yield_kg_ha]`, `yield_kg_ha_${farmProfileIndex}_${index}`);
-    }
+    const removeButtonBox = document.createElement('div');
+    removeButtonBox.className = 'input-box';
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.className = 'btn btn-danger mt-2';
+    removeButton.innerText = 'Remove';
+    removeButton.setAttribute('onclick', 'removeFarmProfile(this)');
+    removeButtonBox.appendChild(removeButton);
+    farmProfile.appendChild(removeButtonBox);
 
-    function removeFarmProfile(index) {
-        const farmProfiles = document.getElementById('farmProfiles');
-        farmProfiles.removeChild(farmProfiles.children[index]);
-    }
+    farmProfiles.appendChild(farmProfile);
+    updateFarmProfileIndices();
+}
 
-    function removeCropFarm(farmProfileIndex, index) {
-        const cropFarms = document.getElementById(`cropFarms_${farmProfileIndex}`);
-        cropFarms.removeChild(cropFarms.children[index]);
-    }
+function removeFarmProfile(button) {
+    const farmProfile = button.closest('.user-details');
+    farmProfile.remove();
+    updateFarmProfileIndices();
+}
 
-    showStep(currentStep);
+function updateFarmProfileIndices() {
+    const farmProfiles = document.querySelectorAll('#farmProfiles .user-details');
+    farmProfiles.forEach((farmProfile, index) => {
+        const selects = farmProfile.querySelectorAll('select, input');
+        selects.forEach(select => {
+            const name = select.getAttribute('name');
+            const id = select.getAttribute('id');
+            if (name) {
+                const newName = name.replace(/\[\d+\]/, `[${index}]`);
+                select.setAttribute('name', newName);
+            }
+            if (id) {
+                const newId = id.replace(/_\d+$/, `_${index}`);
+                select.setAttribute('id', newId);
+            }
+        });
+    });
+}
+
+function checkTenurial() {
+    const tenurialSelects = document.querySelectorAll('select[name^="farm_profiles"][name$="[tenurial_status]"]');
+    tenurialSelects.forEach(select => {
+        const inputBox = select.closest('.input-box').nextElementSibling;
+        if (select.value === 'Add') {
+            inputBox.style.display = 'block';
+        } else {
+            inputBox.style.display = 'none';
+        }
+    });
+}
+
 </script>
 
 
